@@ -1,0 +1,14 @@
+{
+  "name": "online-blackjack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "5 kisilik online Blackjack",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}

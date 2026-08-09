@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Online Blackjack</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div id="joinScreen" class="center"><div class="panel joinPanel"><h1>♠ BLACKJACK ♥</h1><p>5 kişiye kadar online masa</p>
+<input id="name" placeholder="Adın" maxlength="16"><input id="room" placeholder="Oda kodu" maxlength="12"><button id="join">Masaya Gir</button><p class="small">Sadece sanal çip kullanılır.</p></div></div>
+<div id="game" class="hidden"><header><div><b>♠ BLACKJACK ♥</b><span id="roomLabel"></span></div><div class="headerRight"><div id="message"></div><button id="soundToggle" class="soundBtn">🔊 Ses</button></div></header>
+<main><section class="table"><div class="dealer"><h2>KRUPİYE</h2><div id="dealerCards" class="cards"></div><div id="dealerValue"></div></div><div class="feltLine"></div><section id="players"></section></section>
+<section id="controls" class="panel controls"><div id="betBox"><label>Bahis</label><input id="bet" type="number" min="1" value="10"><button id="setBet">Bahsi Ayarla</button><button id="start">El Başlat</button></div>
+<div id="playBox" class="hidden"><button id="hit">Kart Çek</button><button id="stand">Dur</button><button id="double">Double</button></div>
+<div id="hostBox" class="hidden"><span id="hostLabel">👑 Oda Sahibi</span><button id="resetLobby" class="dangerBtn">↻ Lobiyi Sıfırla</button></div>
+<button id="next" class="hidden">Yeni El</button></section></main></div>
+<div id="effects"></div><div id="error" class="toast hidden"></div><script src="/socket.io/socket.io.js"></script><script src="game.js"></script></body></html>
