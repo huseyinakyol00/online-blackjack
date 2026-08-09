@@ -140,3 +140,75 @@ $("resetLobby").onclick=()=>{
     socket.emit("resetLobby");
   }
 };
+
+// ---------- Casino chips ----------
+let selectedBet = 10;
+const chipButtons = document.querySelectorAll(".chip");
+chipButtons.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    ensureAudio();
+    const amount=Number(btn.dataset.chip);
+    selectedBet=amount;
+    const input=document.getElementById("bet");
+    if(input){
+      const me=state?.players?.find(p=>p.id===myId);
+      input.value=Math.min(amount, me?.chips ?? amount);
+    }
+    chipSound();
+    flyChips(amount);
+    const sum=document.querySelector("#betSummary b");
+    if(sum)sum.textContent=amount;
+  });
+});
+function flyChips(amount){
+  const effects=document.getElementById("effects");
+  if(!effects)return;
+  const start=document.querySelector(".chipTray");
+  const target=document.getElementById("betSummary");
+  const sr=start?.getBoundingClientRect(),tr=target?.getBoundingClientRect();
+  if(!sr||!tr)return;
+  for(let i=0;i<Math.min(8,Math.max(3,Math.ceil(amount/100)));i++){
+    const c=document.createElement("div");
+    c.className="flyingChip";c.textContent=amount;
+    c.style.left=(sr.left+sr.width/2+Math.random()*80-40)+"px";
+    c.style.top=(sr.top+sr.height/2+Math.random()*30-15)+"px";
+    c.style.setProperty("--dx",(Math.random()*100-50)+"px");
+    c.style.setProperty("--dy",(Math.random()*-80-30)+"px");
+    c.style.setProperty("--tx",(tr.left+tr.width/2-sr.left-sr.width/2)+"px");
+    c.style.setProperty("--ty",(tr.top+tr.height/2-sr.top-sr.height/2)+"px");
+    effects.appendChild(c);
+    setTimeout(()=>c.remove(),750);
+  }
+}
+function animateNewCards(){
+  document.querySelectorAll(".card").forEach((c,i)=>{
+    c.classList.remove("dealGlow");
+    setTimeout(()=>c.classList.add("dealGlow"),i*65);
+  });
+}
+// Wrap render to add card-deal motion after DOM updates.
+const _renderWithChips = render;
+render = function(){
+  _renderWithChips();
+  animateNewCards();
+  const me=state?.players?.find(p=>p.id===myId);
+  const sum=document.querySelector("#betSummary b");
+  if(sum)sum.textContent=me?.bet||10;
+};
+
+// Animate chip movement whenever a round begins or bet changes.
+const _detectEffectsWithChips = detectEffects;
+detectEffects = function(prev,now){
+  _detectEffectsWithChips(prev,now);
+  if(prev.phase!==now.phase && now.phase==="playing"){
+    flyChips(prev.players.find(p=>p.id===myId)?.bet || 10);
+  }
+  if(prev.players && now.players){
+    now.players.forEach((p,i)=>{
+      const old=prev.players[i];
+      if(old && p.chips!==old.chips && p.id===myId && p.chips>old.chips){
+        flyChips(p.chips-old.chips);
+      }
+    });
+  }
+};

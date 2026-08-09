@@ -40,3 +40,29 @@ main{max-width:1400px;margin:auto;padding:18px}
 .dangerBtn{background:#a82b35;color:#fff}.dangerBtn:hover{background:#c83a46}
 
 #hostBox{display:inline-flex;align-items:center;gap:8px;margin-left:8px}#hostLabel{font-size:12px;opacity:.8}.dangerBtn{background:#b52f3a!important;color:#fff!important}
+
+/* --- Casino chip system / motion layer --- */
+:root{--felt:#075c3b;--gold:#e8b94f;--panel:#0b0d0f}
+body{background:radial-gradient(circle at 50% 35%,#171a19 0,#090a0a 62%,#050505 100%);overflow-x:hidden}
+header{background:rgba(4,5,6,.96);box-shadow:0 2px 18px #000}
+#game{position:relative}
+.chipTray{display:flex;justify-content:center;align-items:center;gap:10px;margin:10px auto 0;position:relative;z-index:8}
+.chip{width:58px;height:58px;border-radius:50%;border:5px dashed rgba(255,255,255,.72);font-weight:900;font-size:15px;color:#fff;cursor:pointer;box-shadow:0 5px 12px #0009,inset 0 0 0 3px #ffffff33;transition:transform .12s,filter .12s}
+.chip:hover{transform:translateY(-5px) scale(1.06);filter:brightness(1.15)}
+.chip:active{transform:translateY(1px) scale(.96)}
+.chip10{background:#16854f}.chip25{background:#b93438}.chip50{background:#315dba}.chip100{background:#20242a}.chip250{background:#7b3ab0}.chip500{background:#b47b25}
+.betSummary{width:max-content;margin:8px auto 0;background:#050708dd;border:1px solid #ffffff20;border-radius:999px;padding:8px 16px;color:#ddd;position:relative;z-index:8}
+.betSummary b{color:var(--gold);font-size:17px}
+#effects{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+.flyingChip{position:fixed;width:42px;height:42px;border-radius:50%;border:4px dashed #fff;background:#b93438;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900;box-shadow:0 0 18px #e8b94f88,0 8px 16px #0009;animation:flyChip .65s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes flyChip{0%{transform:translate(-50%,-50%) rotate(0) scale(.55);opacity:0}15%{opacity:1}55%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(220deg) scale(1.08)}100%{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) rotate(520deg) scale(.85);opacity:0}}
+.chipStack{display:inline-flex;flex-direction:column-reverse;vertical-align:middle;margin-right:5px;transform:translateY(2px)}
+.miniChip{width:22px;height:22px;border-radius:50%;border:2px dashed #fff;box-shadow:0 2px 4px #0008;margin-top:-13px}
+.dealGlow{animation:dealGlow .5s ease-out}@keyframes dealGlow{0%{filter:brightness(2);transform:translateY(-8px) scale(1.05)}100%{filter:brightness(1);transform:none}}
+.player.active{box-shadow:0 0 0 1px #e8b94f,0 0 28px #e8b94f44!important}
+#dealerCards .card,.cards .card{transition:transform .18s,box-shadow .18s}
+#dealerCards .card:hover,.cards .card:hover{transform:translateY(-8px) rotate(-1deg);box-shadow:0 14px 25px #0009}
+#betBox,#playBox,#hostBox,#next{box-shadow:0 10px 30px #0008}
+@media(max-width:900px){
+  .chip{width:48px;height:48px;font-size:13px}.chipTray{gap:6px;flex-wrap:wrap}.betSummary{margin-bottom:6px}
+}
