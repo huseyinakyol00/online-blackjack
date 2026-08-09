@@ -73,32 +73,54 @@ function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;","
 
 function render(){
   if(!state)return;
-  $("message").textContent=state.message||"";
+  $("message").textContent="Sistem: "+(state.message||"");
   $("dealerCards").innerHTML=state.dealer.cards.map(cardHTML).join("");
   $("dealerValue").textContent=state.dealer.hidden?"Değer: ?":`Değer: ${state.dealer.value}`;
-  $("players").innerHTML=state.players.map(p=>{
+
+  $("players").innerHTML=state.players.map((p,i)=>{
     const active=p.id===state.currentPlayerId,me=p.id===myId;
     return `<div class="player ${active?"active":""} ${me?"me":""} ${p.status==="out"?"out":""}">
-      <div class="playerHead"><b>${escapeHtml(p.name)}${me?" (Sen)":""}</b><span>💰 ${p.chips}</span></div>
+      <div class="playerHead"><b>${escapeHtml(p.name)}${me?" (Sen)":""}</b><span>🪙 ${p.chips}</span></div>
       <div class="cards">${p.cards.map(cardHTML).join("")}</div>
+      <div class="chipPile">${chipStackHTML(p.bet||0)}</div>
       <div class="playerInfo">
-        <div class="playerBet">Bahis: ${p.bet}</div>
+        <div class="playerBet">Bahis: ${p.bet||0}</div>
         <div class="playerValue">KART DEĞERİ: ${p.cards.length?p.value:"-"}</div>
         <div class="status">${p.result||statusText(p.status)}</div>
       </div>
     </div>`;
   }).join("");
-  const me=state.players.find(p=>p.id===myId),isMyTurn=state.currentPlayerId===myId&&state.phase==="playing";
-  const isHost=state.hostId===myId;
-  $("betBox").classList.toggle("hidden",state.phase!=="betting"||!me||me.chips<=0);
+
+  $("playersList").innerHTML=state.players.map((p,i)=>`
+    <div class="playerMini ${p.id===myId?"me":""}">
+      <div class="avatar">${i+1}</div>
+      <div class="ptext"><b>${escapeHtml(p.name)}${p.id===myId?" (Sen)":""}</b><small>${p.id===state.hostId?"👑 Oda Sahibi":statusText(p.status)}</small></div>
+      <div class="miniCoins">🪙 ${p.chips}</div>
+    </div>`).join("");
+  $("playerCount").textContent=`(${state.players.length}/5)`;
+  const host=state.players.find(p=>p.id===state.hostId);
+  $("hostName").textContent=host?`👑 ${host.name}`:"👑 —";
+
+  const me=state.players.find(p=>p.id===myId),isMyTurn=state.currentPlayerId===myId&&state.phase==="playing",isHost=state.hostId===myId;
+  $("betBox")?.classList.add("hidden"); // compatibility; side controls are always visible during betting
   $("playBox").classList.toggle("hidden",!isMyTurn);
-  $("next").classList.toggle("hidden",state.phase!=="finished" || state.hostId!==myId);
+  $("next").classList.toggle("hidden",state.phase!=="finished"||!isHost);
   $("hostBox").classList.toggle("hidden",!isHost);
-  if(me&&document.activeElement!==$("bet"))$("bet").value=me.bet||10;
   $("start").disabled=!isHost||!me||me.chips<=0;
   $("setBet").disabled=!me||me.chips<=0;
+  $("bet").disabled=state.phase!=="betting"||!me||me.chips<=0;
+  if(me&&document.activeElement!==$("bet"))$("bet").value=me.bet||10;
+  $("myBalance").textContent=me?me.chips:"-";
+  $("betTotal").textContent=me?me.bet||0:"0";
+  $("myResult").textContent=me?.result||"—";
 }
 
+function chipClassFor(v){if(v>=500)return"gold";if(v>=250)return"purple";if(v>=100)return"black";if(v>=50)return"blue";if(v>=25)return"red";return"green"}
+function chipStackHTML(amount){
+  let remain=Number(amount)||0,vals=[500,250,100,50,25,10],out=[];
+  for(const v of vals){while(remain>=v&&out.length<16){out.push(v);remain-=v}}
+  return out.map(v=>`<div class="chipVisual ${chipClassFor(v)}">${v}</div>`).join("");
+}
 function detectEffects(prev,now){
   // Card dealt/hit
   const oldCounts=prev.players.map(p=>p.cards.length);
@@ -142,44 +164,8 @@ $("resetLobby").onclick=()=>{
 };
 
 // ---------- Casino chips ----------
-let selectedBet = 10;
-const chipButtons = document.querySelectorAll(".chip");
-chipButtons.forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    ensureAudio();
-    const amount=Number(btn.dataset.chip);
-    selectedBet=amount;
-    const input=document.getElementById("bet");
-    if(input){
-      const me=state?.players?.find(p=>p.id===myId);
-      input.value=Math.min(amount, me?.chips ?? amount);
-    }
-    chipSound();
-    flyChips(amount);
-    const sum=document.querySelector("#betSummary b");
-    if(sum)sum.textContent=amount;
-  });
-});
-function flyChips(amount){
-  const effects=document.getElementById("effects");
-  if(!effects)return;
-  const start=document.querySelector(".chipTray");
-  const target=document.getElementById("betSummary");
-  const sr=start?.getBoundingClientRect(),tr=target?.getBoundingClientRect();
-  if(!sr||!tr)return;
-  for(let i=0;i<Math.min(8,Math.max(3,Math.ceil(amount/100)));i++){
-    const c=document.createElement("div");
-    c.className="flyingChip";c.textContent=amount;
-    c.style.left=(sr.left+sr.width/2+Math.random()*80-40)+"px";
-    c.style.top=(sr.top+sr.height/2+Math.random()*30-15)+"px";
-    c.style.setProperty("--dx",(Math.random()*100-50)+"px");
-    c.style.setProperty("--dy",(Math.random()*-80-30)+"px");
-    c.style.setProperty("--tx",(tr.left+tr.width/2-sr.left-sr.width/2)+"px");
-    c.style.setProperty("--ty",(tr.top+tr.height/2-sr.top-sr.height/2)+"px");
-    effects.appendChild(c);
-    setTimeout(()=>c.remove(),750);
-  }
-}
+let selectedBet = 0;
+
 function animateNewCards(){
   document.querySelectorAll(".card").forEach((c,i)=>{
     c.classList.remove("dealGlow");
@@ -213,32 +199,7 @@ detectEffects = function(prev,now){
   }
 };
 
-// ===== BET CHIP STACKING =====
-(function(){
-  function syncBetFromChips(){
-    const me=state?.players?.find(p=>p.id===myId);
-    if(!me)return;
-    const input=document.getElementById("bet");
-    const summary=document.querySelector("#betSummary b");
-    if(input)input.value=selectedBet;
-    if(summary)summary.textContent=selectedBet;
-  }
 
-  document.querySelectorAll("#chipTray .chip").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const me=state?.players?.find(p=>p.id===myId);
-      if(!me || state.phase!=="betting" || me.chips<=0)return;
-      const amount=Number(btn.dataset.chip)||0;
-      selectedBet=Math.min(me.chips, Math.max(0, Number(selectedBet)||0) + amount);
-      syncBetFromChips();
-      ensureAudio?.();
-      chipSound?.();
-      flyChips?.(amount, document.getElementById("betSummary"));
-    });
-  });
-})();
-
-// "Yeni El" is a host-only control.
 (function(){
   const enforceHostNext=()=>{
     const b=document.getElementById("next");
@@ -247,3 +208,37 @@ detectEffects = function(prev,now){
   };
   setInterval(enforceHostNext,250);
 })();
+
+
+
+// ===== Final casino chip controls =====
+let selectedBet=0;
+const chipTrayFinal=document.getElementById("chipTray");
+chipTrayFinal?.addEventListener("click",e=>{
+  const btn=e.target.closest(".chip"); if(!btn)return;
+  const me=state?.players?.find(p=>p.id===myId);
+  if(!me||state.phase!=="betting"||me.chips<=0)return;
+  const amount=Number(btn.dataset.chip)||0;
+  if(selectedBet===0)selectedBet=Number(me.bet)||0;
+  selectedBet=Math.min(me.chips,selectedBet+amount);
+  $("bet").value=selectedBet;$("betTotal").textContent=selectedBet;
+  chipSound();flyChips(amount,$("betTotal"));
+});
+$("clearBet").onclick=()=>{
+  const me=state?.players?.find(p=>p.id===myId); if(!me||state.phase!=="betting")return;
+  selectedBet=0;$("bet").value=0;$("betTotal").textContent=0;chipSound();
+};
+$("bet").addEventListener("input",()=>{selectedBet=Math.max(0,Number($("bet").value)||0);$("betTotal").textContent=selectedBet});
+function flyChips(amount,targetEl){
+  const effects=$("effects"), tray=$("chipTray"), target=targetEl||$("betTotal");
+  const sr=tray?.getBoundingClientRect(),tr=target?.getBoundingClientRect();if(!sr||!tr)return;
+  for(let i=0;i<Math.min(10,Math.max(2,Math.ceil(amount/50)));i++){
+    const c=document.createElement("div");c.className="flyingChip "+chipClassFor(amount);c.textContent=amount;
+    c.style.left=(sr.left+sr.width/2+Math.random()*70-35)+"px";c.style.top=(sr.top+sr.height/2)+"px";
+    c.style.setProperty("--dx",(Math.random()*120-60)+"px");c.style.setProperty("--dy",(Math.random()*-100-20)+"px");
+    c.style.setProperty("--tx",(tr.left+tr.width/2-sr.left-sr.width/2)+"px");c.style.setProperty("--ty",(tr.top+tr.height/2-sr.top-sr.height/2)+"px");
+    effects.appendChild(c);setTimeout(()=>c.remove(),850);
+  }
+}
+const oldRenderCasino=render;
+render=function(){oldRenderCasino();const me=state?.players?.find(p=>p.id===myId);if(me){selectedBet=Number(me.bet)||0;$("bet").value=me.bet||0;$("betTotal").textContent=me.bet||0}};

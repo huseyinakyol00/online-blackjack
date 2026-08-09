@@ -1,22 +1,94 @@
 <!DOCTYPE html>
-<html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Online Blackjack</title><link rel="stylesheet" href="style.css"></head>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Online Blackjack</title>
+<link rel="stylesheet" href="style.css">
+</head>
 <body>
-<div id="joinScreen" class="center"><div class="panel joinPanel"><h1>♠ BLACKJACK ♥</h1><p>5 kişiye kadar online masa</p>
-<input id="name" placeholder="Adın" maxlength="16"><input id="room" placeholder="Oda kodu" maxlength="12"><button id="join">Masaya Gir</button><p class="small">Sadece sanal çip kullanılır.</p></div></div>
-<div id="game" class="hidden"><header><div><b>♠ BLACKJACK ♥</b><span id="roomLabel"></span></div><div class="headerRight"><div id="message"></div><button id="soundToggle" class="soundBtn">🔊 Ses</button></div></header>
-<main><section class="table"><div class="dealer"><h2>KRUPİYE</h2><div id="dealerCards" class="cards"></div><div id="dealerValue"></div></div><div class="feltLine"></div><section id="players"></section></section>
-<section id="controls" class="panel controls"><div id="betBox"><label>Bahis</label><input id="bet" type="number" min="1" value="10"><button id="setBet">Bahsi Ayarla</button><button id="start">El Başlat</button></div>
-<div id="playBox" class="hidden"><button id="hit">Kart Çek</button><button id="stand">Dur</button><button id="double">Double</button></div>
-<div id="hostBox" class="hidden"><span id="hostLabel">👑 Oda Sahibi</span><button id="resetLobby" class="dangerBtn">↻ Lobiyi Sıfırla</button></div>
-<button id="next" class="hidden">Yeni El</button></section></main></div>
-<div id="effects"></div>
-<div id="chipTray" class="chipTray">
-  <button class="chip chip10" data-chip="10">10</button>
-  <button class="chip chip25" data-chip="25">25</button>
-  <button class="chip chip50" data-chip="50">50</button>
-  <button class="chip chip100" data-chip="100">100</button>
-  <button class="chip chip250" data-chip="250">250</button>
-  <button class="chip chip500" data-chip="500">500</button>
+<div id="joinScreen" class="joinScreen">
+  <div class="joinCard">
+    <div class="joinLogo">♠ BLACKJACK ♥</div>
+    <div class="joinSub">5 kişiye kadar online masa</div>
+    <input id="name" placeholder="Adın" maxlength="16">
+    <input id="room" placeholder="Oda kodu" maxlength="12">
+    <button id="join" class="goldBtn bigBtn">MASAYA GİR</button>
+    <div class="joinSmall">Sadece sanal çip kullanılır.</div>
+  </div>
 </div>
-<div id="betSummary" class="betSummary">Bahis: <b>10</b></div><div id="error" class="toast hidden"></div><script src="/socket.io/socket.io.js"></script><script src="game.js"></script></body></html>
+
+<div id="game" class="hidden">
+<header class="topbar">
+  <div class="brand">♠ <b>BLACKJACK</b> ♥ <span id="roomLabel">Oda: -</span></div>
+  <div class="headerRight"><div id="message"></div><button id="soundToggle" class="soundBtn">🔊 Ses Açık</button></div>
+</header>
+
+<div class="casinoLayout">
+  <aside class="controlPanel">
+    <div class="sideTitle">OYUN KONTROLLERİ</div>
+    <label>Bahis</label>
+    <div class="sideBet"><span>🪙</span><input id="bet" type="number" min="1" value="10"></div>
+    <button id="setBet" class="sideBtn gold">↻ Bahsi Ayarla</button>
+    <button id="start" class="sideBtn gold">▶ El Başlat</button>
+    <button id="next" class="sideBtn gold hidden">▶ Yeni El</button>
+    <div id="playBox" class="playButtons hidden">
+      <button id="hit" class="sideBtn green">＋ Kart Çek</button>
+      <button id="stand" class="sideBtn yellow">✋ Dur</button>
+      <button id="double" class="sideBtn blue">× 2 Double</button>
+    </div>
+    <div id="hostBox" class="hostBox hidden">
+      <div id="hostLabel">👑 ODA SAHİBİ</div>
+      <button id="resetLobby" class="sideBtn red">↻ Lobiyi Sıfırla</button>
+    </div>
+    <div class="sideDivider"></div>
+    <div class="sideTitle">ODA SAHİBİ</div>
+    <div id="hostName" class="hostName">👑 —</div>
+    <div class="sideDivider"></div>
+    <div class="sideTitle">OYUNCULAR <span id="playerCount">(0/5)</span></div>
+    <div id="playersList"></div>
+  </aside>
+
+  <main class="tableArea">
+    <div class="tableWrap">
+      <div class="felt">
+        <div class="feltPrint">BLACKJACK PAYS 3 TO 2<span>Dealer must stand on 17 and must draw to 16</span><span>INSURANCE PAYS 2 TO 1</span></div>
+
+        <div class="dealerSpot">
+          <div class="dealerLabel">KRUPİYE</div>
+          <div id="dealerCards" class="cards"></div>
+          <div id="dealerValue" class="dealerValue">Değer: 0</div>
+        </div>
+
+        <div class="deckVisual"><div class="deckBack"></div><div class="deckBack second"></div></div>
+        <div id="players" class="tablePlayers"></div>
+        <div id="effects"></div>
+      </div>
+    </div>
+
+    <div class="systemLog">
+      <div id="message">Sistem: Odaya hoş geldiniz.</div>
+    </div>
+  </main>
+</div>
+
+<div class="bottomBar">
+  <div id="chipTray" class="chipTray">
+    <button class="chip chip10" data-chip="10">10</button>
+    <button class="chip chip25" data-chip="25">25</button>
+    <button class="chip chip50" data-chip="50">50</button>
+    <button class="chip chip100" data-chip="100">100</button>
+    <button class="chip chip250" data-chip="250">250</button>
+    <button class="chip chip500" data-chip="500">500</button>
+  </div>
+  <div class="totalBet"><span>Toplam Bahis</span><strong>🪙 <b id="betTotal">10</b></strong></div>
+  <div class="wallet"><span>Bakiye</span><strong id="myBalance">1000</strong></div>
+  <button id="clearBet" class="clearBtn">↺ Bahsi Temizle</button>
+  <div id="myResult" class="resultBox">—</div>
+</div>
+
+<div id="error" class="toast hidden"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
