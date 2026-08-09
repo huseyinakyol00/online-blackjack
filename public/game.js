@@ -104,11 +104,9 @@ function render(){
   const me=state.players.find(p=>p.id===myId),isMyTurn=state.currentPlayerId===myId&&state.phase==="playing",isHost=state.hostId===myId;
   $("betBox")?.classList.add("hidden"); // compatibility; side controls are always visible during betting
   $("playBox").classList.toggle("hidden",!isMyTurn);
-  $("next").classList.toggle("hidden",state.phase!=="finished"||!isHost);
+  $("next").classList.add("hidden");
   $("hostBox").classList.toggle("hidden",!isHost);
   $("start").disabled=!isHost||!me||me.chips<=0;
-  $("setBet").disabled=!me||me.chips<=0;
-  $("bet").disabled=state.phase!=="betting"||!me||me.chips<=0;
   if(me&&document.activeElement!==$("bet"))$("bet").value=me.bet||10;
   $("myBalance").textContent=me?me.chips:"-";
   $("betTotal").textContent=me?me.bet||0:"0";
@@ -148,7 +146,6 @@ function popChip(){
   setTimeout(()=>el.remove(),850);
 }
 
-$("setBet").onclick=()=>{ensureAudio();chipSound();socket.emit("setBet",Number($("bet").value))};
 $("start").onclick=()=>{if(state?.hostId!==myId){showError("Sadece oda sahibi eli başlatabilir.");return}ensureAudio();chipSound();socket.emit("startRound")};
 $("hit").onclick=()=>{ensureAudio();cardSound();socket.emit("hit")};
 $("stand").onclick=()=>{ensureAudio();socket.emit("stand")};
@@ -222,11 +219,13 @@ chipTrayFinal?.addEventListener("click",e=>{
   if(selectedBet===0)selectedBet=Number(me.bet)||0;
   selectedBet=Math.min(me.chips,selectedBet+amount);
   $("bet").value=selectedBet;$("betTotal").textContent=selectedBet;
+  socket.emit("setBet",selectedBet);
   chipSound();flyChips(amount,$("betTotal"));
 });
 $("clearBet").onclick=()=>{
   const me=state?.players?.find(p=>p.id===myId); if(!me||state.phase!=="betting")return;
-  selectedBet=0;$("bet").value=0;$("betTotal").textContent=0;chipSound();
+  selectedBet=0;$("bet").value=0;$("betTotal").textContent=0;
+  socket.emit("setBet",0);chipSound();
 };
 $("bet").addEventListener("input",()=>{selectedBet=Math.max(0,Number($("bet").value)||0);$("betTotal").textContent=selectedBet});
 function flyChips(amount,targetEl){
@@ -242,3 +241,24 @@ function flyChips(amount,targetEl){
 }
 const oldRenderCasino=render;
 render=function(){oldRenderCasino();const me=state?.players?.find(p=>p.id===myId);if(me){selectedBet=Number(me.bet)||0;$("bet").value=me.bet||0;$("betTotal").textContent=me.bet||0}};
+
+// ===== AUTOMATIC NEXT HAND =====
+let autoNextTimer=null;
+let autoNextStamp=0;
+function scheduleAutomaticNext(prev,now){
+  if(prev.phase!=="finished" && now.phase==="finished" && now.hostId===myId){
+    const stamp=Date.now();
+    autoNextStamp=stamp;
+    clearTimeout(autoNextTimer);
+    autoNextTimer=setTimeout(()=>{
+      if(autoNextStamp!==stamp || !state || state.phase!=="finished" || state.hostId!==myId)return;
+      ensureAudio();chipSound();socket.emit("nextRound");
+    },3000);
+  }
+  if(now.phase!=="finished"){clearTimeout(autoNextTimer);autoNextTimer=null;}
+}
+const _stateEffectAuto = detectEffects;
+detectEffects=function(prev,now){
+  _stateEffectAuto(prev,now);
+  scheduleAutomaticNext(prev,now);
+};

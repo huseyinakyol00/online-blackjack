@@ -35,3 +35,95 @@ body{background:radial-gradient(circle at 50% 45%,#151817 0,#080909 68%,#030303 
 .toast{position:fixed;right:18px;bottom:120px;background:#a82c38;padding:12px 16px;border-radius:8px;z-index:900}
 @media(max-width:1050px){.casinoLayout{grid-template-columns:190px 1fr}.bottomBar{grid-template-columns:1fr 150px 120px 120px}.clearBtn{display:none}.chipTray{gap:8px}.chip{width:54px;height:54px}.player{width:145px}}
 @media(max-width:800px){html,body{overflow:auto}.casinoLayout{height:auto;min-height:calc(100vh - 160px);grid-template-columns:1fr}.controlPanel{height:auto;max-height:none}.tableWrap{height:600px}.bottomBar{height:auto;grid-template-columns:1fr 1fr;padding:10px}.chipTray{grid-column:1/-1;flex-wrap:wrap}.systemLog{height:45px}.player{width:125px;height:145px}.player:nth-child(2){left:18%}.player:nth-child(4){right:18%}}
+
+/* ===== Reference casino layout ===== */
+body{background:#030504}
+.topbar{height:56px;background:linear-gradient(180deg,#080807,#030303);border-bottom:1px solid #5a4519;padding:0 22px}
+.brand{font-family:Georgia,serif;color:#f2d17a;font-size:20px;letter-spacing:1px}.brand span{color:#d8b75d}
+.casinoLayout{height:calc(100vh - 56px - 118px);display:block;position:relative;padding:0;overflow:hidden}
+.controlPanel{position:absolute;z-index:30;left:12px;top:14px;width:225px;height:calc(100% - 28px);background:linear-gradient(180deg,#0c0d0cdd,#080909f0);border-color:#35332c;border-radius:11px;backdrop-filter:blur(8px)}
+.tableArea{height:100%;display:block;padding:0}
+.tableWrap{height:100%;width:100%}
+.felt{position:absolute;left:50%;top:2%;transform:translateX(-50%);width:calc(100% - 290px);height:94%;border:13px solid #2b1b0d;border-radius:49% / 49%;background:radial-gradient(ellipse at 50% 45%,#0b7042 0,#075b37 48%,#043720 100%);box-shadow:inset 0 0 100px #0009,0 20px 45px #000c}
+.felt:after{content:"";position:absolute;inset:10px;border:2px solid #8d6b2d66;border-radius:49% / 49%;pointer-events:none}
+.feltPrint{top:48%;width:55%;font-size:28px;color:#d0ac57aa;z-index:1}.feltPrint span{font-size:13px}
+.dealerSpot{top:7%;z-index:20}.dealerLabel{font-family:Georgia,serif;font-size:14px;background:#06140ed9;border-radius:18px;padding:8px 25px 5px;display:inline-block}.dealerValue{background:#06140ed9;border:1px solid #765d27;color:#f4d36e;font-weight:900;padding:4px 13px}
+.deckVisual{right:8%;top:8%;z-index:18}
+.tablePlayers{z-index:15}
+.player{width:175px;height:175px;border-radius:12px;background:linear-gradient(180deg,#07120de8,#030806e9);border:1px solid #ffffff38;box-shadow:0 10px 25px #000b;padding:9px;transform:none}
+.player.me{border-color:#2e91d8;box-shadow:0 0 25px #2584c544,0 10px 25px #000b}
+.player.active{border-color:#e7bf4c;box-shadow:0 0 30px #e7bf4c66,0 10px 25px #000b}
+.playerHead{font-size:12px}.player .cards{position:absolute;top:38px;left:50%;transform:translateX(-50%);min-height:70px;white-space:nowrap}.player .card{width:52px;height:74px;margin-left:-13px;font-size:20px;box-shadow:0 5px 10px #000c}.player .card:first-child{margin-left:0}
+.playerInfo{bottom:7px;background:#030907e8;border:1px solid #ffffff14;padding:5px}.playerValue{font-size:14px;color:#f4d36e}.playerBet{font-size:12px;color:#f4d36e}
+.chipPile{bottom:42px;height:35px}.chipVisual{width:32px;height:32px}
+.player:nth-child(1){left:5%;bottom:27%}.player:nth-child(2){left:25%;bottom:8%}.player:nth-child(3){left:50%;transform:translateX(-50%);bottom:3%}.player:nth-child(4){right:25%;bottom:8%}.player:nth-child(5){right:5%;bottom:27%}
+.systemLog{position:absolute;left:235px;bottom:5px;width:calc(100% - 470px);height:45px;z-index:40;background:#080909e8;border-color:#292c27}
+.bottomBar{height:118px;background:linear-gradient(180deg,#0b0c0c,#050606);grid-template-columns:190px 1fr 170px 120px 150px;gap:14px;padding:10px 18px}
+.chipTray{gap:14px}.chip{width:62px;height:62px}
+.totalBet{height:60px}.wallet{height:60px}
+.resultBox{height:60px}
+.clearBtn{height:42px}
+.playButtons{position:fixed;right:18px;bottom:14px;z-index:250;display:flex;gap:10px;width:410px;margin:0;padding:0;background:#080a09}.playButtons .sideBtn{height:60px;margin:0;font-size:16px;border-radius:8px;box-shadow:0 7px 16px #0008}.playButtons .green{background:linear-gradient(#168a49,#0d6335)}.playButtons .yellow{background:linear-gradient(#c92d2d,#8f1e25);color:#fff}.playButtons .blue{background:#2e5d9d}
+.hostBox{margin-top:10px}
+@media(max-width:1050px){
+ .felt{width:calc(100% - 240px)}.controlPanel{width:190px}.player{width:145px;height:155px}.player .card{width:45px;height:65px}.player:nth-child(1){left:2%}.player:nth-child(5){right:2%}
+ .systemLog{left:205px;width:calc(100% - 220px)}.bottomBar{grid-template-columns:130px 1fr 140px}.chip{width:52px;height:52px}.playButtons{width:330px}
+}
+
+/* ===== FINAL CASINO TABLE COMPOSITION ===== */
+.casinoLayout{grid-template-columns:245px 1fr;gap:14px;padding:8px 14px}
+.controlPanel{background:linear-gradient(180deg,#090b0b,#060707);border-color:#30352f;padding:15px}
+.controlPanel .sideBet,.controlPanel>label,.controlPanel #setBet{display:none!important}
+.sideBtn{min-height:43px;font-size:13px}
+.sideBtn.green{background:linear-gradient(#229d57,#16743f)}
+.yourTurnLabel{text-align:center;color:#e8c35b;font-size:10px;font-weight:900;letter-spacing:1.5px;margin:8px 0 4px}
+.playButtons{border-top:1px solid #2a302b;margin-top:9px;padding-top:8px}
+.hostBox{border-top:1px solid #242a27;padding-top:8px}
+.tableArea{gap:7px}
+.felt{border-width:14px;border-radius:50% / 45%;background:radial-gradient(ellipse at 50% 48%,#0a7547 0,#075536 52%,#043720 100%);box-shadow:inset 0 0 100px #0008,0 18px 50px #000a}
+.feltPrint{top:42%;width:58%;font-size:30px;color:#c9a75d66}
+.feltPrint span{font-size:13px}
+.dealerSpot{top:5%;min-width:300px}
+.dealerLabel{font-size:14px;background:#06140eaa;display:inline-block;padding:5px 17px;border-radius:12px}
+.dealerValue{font-size:13px}
+.deckVisual{right:5%;top:8%;transform:rotate(10deg)}
+.player{height:145px;width:180px;background:transparent;border:0;box-shadow:none;padding:0;overflow:visible}
+.player.active{border:0;box-shadow:none}
+.player.me{background:transparent}
+.playerHead{position:absolute;top:0;left:50%;transform:translateX(-50%);min-width:135px;padding:7px 10px;border-radius:8px;background:#07100cdc;border:1px solid #ffffff1e;z-index:4}
+.player .cards{position:absolute;top:38px;left:50%;transform:translateX(-50%);min-height:82px;gap:0;z-index:5}
+.player .card{width:55px;height:76px;font-size:22px;margin-left:-15px;border-radius:7px}
+.player .card:first-child{margin-left:0}
+.playerInfo{left:50%;right:auto;transform:translateX(-50%);bottom:0;min-width:150px;background:#06100de8;border:1px solid #b18b3a66;border-radius:50%;padding:10px 15px 8px}
+.playerBet{color:#eac54f;font-weight:800;font-size:12px}
+.playerValue{font-size:15px}
+.player .chipPile{bottom:39px;z-index:8}
+.chipPile .chipVisual{width:30px;height:30px;font-size:8px}
+.player:nth-child(1){left:3%;bottom:22%}
+.player:nth-child(2){left:24%;bottom:7%}
+.player:nth-child(3){left:50%;bottom:3%;transform:translateX(-50%)}
+.player:nth-child(4){right:24%;bottom:7%}
+.player:nth-child(5){right:3%;bottom:22%}
+.player:nth-child(1) .playerHead{transform:translateX(-30%)}
+.player:nth-child(5) .playerHead{transform:translateX(-70%)}
+.systemLog{height:64px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:10px 18px;background:#080a09}
+.systemLog #message{color:#20cf62;font-weight:700}
+.rulesMini{color:#aaa;font-size:11px;text-align:right}
+.rulesMini b:first-child{color:#efc54d}.rulesMini b:last-child{color:#e15b5b}
+.bottomBar{height:108px;grid-template-columns:minmax(380px,1fr) 165px 135px 130px 130px;padding:10px 18px;background:linear-gradient(#080a09,#050606)}
+.chipTray{gap:17px}
+.chip{width:68px;height:68px;font-size:16px}
+.totalBet,.wallet,.resultBox{height:74px}
+.clearBtn{height:42px}
+.resultBox{font-size:13px}
+@media (max-height:850px) and (min-width:901px){
+  .casinoLayout{height:calc(100vh - 58px - 94px)}
+  .felt{border-width:10px}
+  .player{height:125px;width:160px}
+  .player .cards{top:34px}
+  .player .card{width:48px;height:66px;font-size:19px}
+  .playerInfo{padding:7px 12px}
+  .player .chipPile{bottom:35px}
+  .bottomBar{height:94px}.chip{width:58px;height:58px}.totalBet,.wallet,.resultBox{height:62px}
+  .systemLog{height:48px}.rulesMini{display:none}
+}

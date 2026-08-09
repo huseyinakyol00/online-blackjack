@@ -50,7 +50,21 @@ function dealerTurn(room){
             else p.result="Kaybettin";
         }
     }
-    room.message="El bitti. Sonuçlar açıklandı.";room.phase="finished";
+    room.message="El bitti. Yeni el 4 saniye içinde başlayacak.";room.phase="finished";broadcast(room);
+    if(room.autoRoundTimer) clearTimeout(room.autoRoundTimer);
+    room.autoRoundTimer=setTimeout(()=>{
+        room.autoRoundTimer=null;
+        if(!rooms[room.code]||room.players.length===0)return;
+        const eligible=room.players.filter(p=>p.chips>0);
+        if(eligible.length===0){room.message="Tüm oyuncuların çipi bitti.";broadcast(room);return;}
+        newRound(room);
+        // Keep each player's previous bet when affordable; otherwise use the minimum.
+        for(const p of room.players){
+            if(p.chips<=0){p.bet=0;p.status="out";continue;}
+            p.bet=Math.min(Math.max(1,p.bet||10),p.chips);
+        }
+        startRound(room);
+    },4000);
 }
 function nextPlayer(room){
     while(room.currentPlayerIndex<room.players.length-1){

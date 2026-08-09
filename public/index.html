@@ -27,15 +27,13 @@
 <div class="casinoLayout">
   <aside class="controlPanel">
     <div class="sideTitle">OYUN KONTROLLERİ</div>
-    <label>Bahis</label>
-    <div class="sideBet"><span>🪙</span><input id="bet" type="number" min="1" value="10"></div>
-    <button id="setBet" class="sideBtn gold">↻ Bahsi Ayarla</button>
-    <button id="start" class="sideBtn gold">▶ El Başlat</button>
-    <button id="next" class="sideBtn gold hidden">▶ Yeni El</button>
+    <button id="start" class="sideBtn green">▶ Oyunu Başlat</button>
+    <button id="next" class="sideBtn gold hidden">↻ Yeni El</button>
     <div id="playBox" class="playButtons hidden">
-      <button id="hit" class="sideBtn green">＋ Kart Çek</button>
-      <button id="stand" class="sideBtn yellow">✋ Dur</button>
-      <button id="double" class="sideBtn blue">× 2 Double</button>
+      <div class="yourTurnLabel">SENİN SIRAN</div>
+      <button id="hit" class="sideBtn green">🃏 TAŞ ÇEK</button>
+      <button id="stand" class="sideBtn red">✋ KAL</button>
+      <button id="double" class="sideBtn blue">× 2 DOUBLE</button>
     </div>
     <div id="hostBox" class="hostBox hidden">
       <div id="hostLabel">👑 ODA SAHİBİ</div>
@@ -68,6 +66,7 @@
 
     <div class="systemLog">
       <div id="message">Sistem: Odaya hoş geldiniz.</div>
+      <div class="rulesMini"><b>TAŞ ÇEK:</b> Kart almak için tıklayın &nbsp; • &nbsp; <b>KAL:</b> Mevcut kartlarla devam edin</div>
     </div>
   </main>
 </div>
@@ -81,7 +80,8 @@
     <button class="chip chip250" data-chip="250">250</button>
     <button class="chip chip500" data-chip="500">500</button>
   </div>
-  <div class="totalBet"><span>Toplam Bahis</span><strong>🪙 <b id="betTotal">10</b></strong></div>
+  <input id="bet" type="hidden" value="10">
+<div class="totalBet"><span>Toplam Bahis</span><strong>🪙 <b id="betTotal">10</b></strong></div>
   <div class="wallet"><span>Bakiye</span><strong id="myBalance">1000</strong></div>
   <button id="clearBet" class="clearBtn">↺ Bahsi Temizle</button>
   <div id="myResult" class="resultBox">—</div>
