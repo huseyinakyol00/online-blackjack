@@ -92,7 +92,7 @@ function render(){
   const isHost=state.hostId===myId;
   $("betBox").classList.toggle("hidden",state.phase!=="betting"||!me||me.chips<=0);
   $("playBox").classList.toggle("hidden",!isMyTurn);
-  $("next").classList.toggle("hidden",state.phase!=="finished");
+  $("next").classList.toggle("hidden",state.phase!=="finished" || state.hostId!==myId);
   $("hostBox").classList.toggle("hidden",!isHost);
   if(me&&document.activeElement!==$("bet"))$("bet").value=me.bet||10;
   $("start").disabled=!isHost||!me||me.chips<=0;
@@ -212,3 +212,38 @@ detectEffects = function(prev,now){
     });
   }
 };
+
+// ===== BET CHIP STACKING =====
+(function(){
+  function syncBetFromChips(){
+    const me=state?.players?.find(p=>p.id===myId);
+    if(!me)return;
+    const input=document.getElementById("bet");
+    const summary=document.querySelector("#betSummary b");
+    if(input)input.value=selectedBet;
+    if(summary)summary.textContent=selectedBet;
+  }
+
+  document.querySelectorAll("#chipTray .chip").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const me=state?.players?.find(p=>p.id===myId);
+      if(!me || state.phase!=="betting" || me.chips<=0)return;
+      const amount=Number(btn.dataset.chip)||0;
+      selectedBet=Math.min(me.chips, Math.max(0, Number(selectedBet)||0) + amount);
+      syncBetFromChips();
+      ensureAudio?.();
+      chipSound?.();
+      flyChips?.(amount, document.getElementById("betSummary"));
+    });
+  });
+})();
+
+// "Yeni El" is a host-only control.
+(function(){
+  const enforceHostNext=()=>{
+    const b=document.getElementById("next");
+    if(!b || !state)return;
+    b.classList.toggle("hidden", state.phase!=="finished" || state.hostId!==myId);
+  };
+  setInterval(enforceHostNext,250);
+})();
