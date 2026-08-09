@@ -209,38 +209,31 @@ detectEffects = function(prev,now){
 
 
 // ===== Final casino chip controls =====
-
 const chipTrayFinal=document.getElementById("chipTray");
 chipTrayFinal?.addEventListener("click",e=>{
   const btn=e.target.closest(".chip"); if(!btn)return;
   const me=state?.players?.find(p=>p.id===myId);
   if(!me||state.phase!=="betting"||me.chips<=0)return;
   const amount=Number(btn.dataset.chip)||0;
-  if(selectedBet===0)selectedBet=Number(me.bet)||0;
-  selectedBet=Math.min(me.chips,selectedBet+amount);
-  $("bet").value=selectedBet;$("betTotal").textContent=selectedBet;
+  selectedBet=Number.isFinite(selectedBet)?selectedBet:0;
+  const next=selectedBet+amount;
+  if(next>me.chips)return;
+  selectedBet=next;
+  const betInput=document.getElementById("bet");
+  if(betInput)betInput.value=selectedBet;
+  const total=document.getElementById("betTotal");
+  if(total)total.textContent=selectedBet;
   socket.emit("setBet",selectedBet);
-  chipSound();flyChips(amount,$("betTotal"));
+  chipSound();flyChips(amount,total);
 });
-$("clearBet").onclick=()=>{
-  const me=state?.players?.find(p=>p.id===myId); if(!me||state.phase!=="betting")return;
-  selectedBet=0;$("bet").value=0;$("betTotal").textContent=0;
+document.getElementById("clearBet")?.addEventListener("click",()=>{
+  const me=state?.players?.find(p=>p.id===myId);
+  if(!me||state.phase!=="betting")return;
+  selectedBet=0;
+  const betInput=document.getElementById("bet");if(betInput)betInput.value=0;
+  const total=document.getElementById("betTotal");if(total)total.textContent=0;
   socket.emit("setBet",0);chipSound();
-};
-$("bet").addEventListener("input",()=>{selectedBet=Math.max(0,Number($("bet").value)||0);$("betTotal").textContent=selectedBet});
-function flyChips(amount,targetEl){
-  const effects=$("effects"), tray=$("chipTray"), target=targetEl||$("betTotal");
-  const sr=tray?.getBoundingClientRect(),tr=target?.getBoundingClientRect();if(!sr||!tr)return;
-  for(let i=0;i<Math.min(10,Math.max(2,Math.ceil(amount/50)));i++){
-    const c=document.createElement("div");c.className="flyingChip "+chipClassFor(amount);c.textContent=amount;
-    c.style.left=(sr.left+sr.width/2+Math.random()*70-35)+"px";c.style.top=(sr.top+sr.height/2)+"px";
-    c.style.setProperty("--dx",(Math.random()*120-60)+"px");c.style.setProperty("--dy",(Math.random()*-100-20)+"px");
-    c.style.setProperty("--tx",(tr.left+tr.width/2-sr.left-sr.width/2)+"px");c.style.setProperty("--ty",(tr.top+tr.height/2-sr.top-sr.height/2)+"px");
-    effects.appendChild(c);setTimeout(()=>c.remove(),850);
-  }
-}
-const oldRenderCasino=render;
-render=function(){oldRenderCasino();const me=state?.players?.find(p=>p.id===myId);if(me){selectedBet=Number(me.bet)||0;$("bet").value=me.bet||0;$("betTotal").textContent=me.bet||0}};
+});
 
 // ===== AUTOMATIC NEXT HAND =====
 let autoNextTimer=null;
@@ -261,4 +254,25 @@ const _stateEffectAuto = detectEffects;
 detectEffects=function(prev,now){
   _stateEffectAuto(prev,now);
   scheduleAutomaticNext(prev,now);
+};
+
+// ===== TABLE ACTION BUTTONS =====
+function bindTableAction(id, originalId){
+  const b=document.getElementById(id);
+  if(!b)return;
+  b.onclick=()=>{
+    const original=document.getElementById(originalId);
+    if(original && !original.disabled) original.click();
+  };
+}
+bindTableAction("tableHit","hit");
+bindTableAction("tableStand","stand");
+bindTableAction("tableDouble","double");
+
+const _renderTableActions = render;
+render=function(){
+  _renderTableActions();
+  const me=state?.players?.find(p=>p.id===myId);
+  const myTurn=!!(me && state?.phase==="playing" && state?.currentPlayerId===myId);
+  document.getElementById("tableActions")?.classList.toggle("hidden",!myTurn);
 };

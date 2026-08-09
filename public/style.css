@@ -127,3 +127,69 @@ body{background:#030504}
   .bottomBar{height:94px}.chip{width:58px;height:58px}.totalBet,.wallet,.resultBox{height:62px}
   .systemLog{height:48px}.rulesMini{display:none}
 }
+
+/* ===== REFERENCE CASINO DESIGN ===== */
+html,body{background:#030504}
+body{font-family:Arial,Helvetica,sans-serif}
+.topbar{height:58px;background:#030404;border-bottom:1px solid #72501b;padding:0 26px}
+.brand{font-family:Georgia,serif;color:#f2ca63;font-size:19px;letter-spacing:.4px}
+.brand span{color:#e4bd58;font-family:Arial,sans-serif}
+.headerRight{color:#eee}
+.casinoLayout{height:calc(100vh - 58px - 220px);grid-template-columns:240px 1fr;padding:12px 12px 0;gap:12px}
+.controlPanel{border-radius:8px;background:linear-gradient(180deg,#080909,#030404);border:1px solid #272a27;box-shadow:0 15px 40px #0009;padding:16px}
+.controlPanel .sideTitle{font-size:12px;letter-spacing:1px;color:#c9c9c9}
+.sideBtn{border-radius:6px;min-height:40px}
+.sideBtn.green{background:linear-gradient(#15964d,#0c6d37)}
+.sideBtn.red{background:linear-gradient(#d52f3d,#a31f2b)}
+.hostBox{border-top:1px solid #252a27;margin-top:11px;padding-top:10px}
+.sideDivider{background:#262a28}
+.playerMini{padding:9px 1px}
+.avatar{width:28px;height:28px}
+.tableArea{position:relative;overflow:visible}
+.tableWrap{min-height:0;position:relative}
+.felt{border:10px solid #29180b;border-radius:50% / 45%;background:
+radial-gradient(ellipse at 50% 44%,#0b7448 0,#075b39 45%,#06432b 77%,#052f20 100%);
+box-shadow:inset 0 0 110px #0008,0 20px 45px #000b}
+.felt:after{content:"";position:absolute;inset:8px;border:2px solid #7d5922;border-radius:50% / 45%;pointer-events:none}
+.feltPrint{top:38%;font-family:Georgia,serif;color:#d4ae4d8c;font-size:30px}
+.dealerSpot{top:4%;z-index:20}
+.dealerLabel{background:#073923;color:#fff;border-radius:16px;padding:5px 16px}
+.cards .card{background:linear-gradient(145deg,#fff,#ededed);border:2px solid #ddd;box-shadow:0 7px 13px #000b}
+.card.back{background:repeating-linear-gradient(45deg,#8e1e2a,#8e1e2a 4px,#bd3b46 4px,#bd3b46 7px);border-color:#eee}
+.deckVisual{right:7%;top:7%;z-index:20}
+.tablePlayers{z-index:30}
+.player{width:178px;height:190px;background:transparent!important;border:0!important;box-shadow:none!important}
+.player.active .playerHead{border-color:#e5bd48;box-shadow:0 0 15px #e5bd4844}
+.playerHead{background:#06120de8;border:1px solid #ffffff22;border-radius:14px;top:2px;padding:6px 13px;min-width:118px}
+.player .cards{top:43px;min-height:78px}
+.player .card{width:54px;height:76px;margin-left:-14px}
+.playerInfo{bottom:1px;background:#06120df0;border:1px solid #6e5428;border-radius:9px;min-width:118px;padding:5px 10px}
+.playerValue{color:#f1c84e}
+.playerBet{color:#f0c552}
+.player .chipPile{bottom:45px}
+.player:nth-child(1){left:4%;bottom:25%}
+.player:nth-child(2){left:25%;bottom:8%}
+.player:nth-child(3){left:50%;bottom:4%;transform:translateX(-50%)}
+.player:nth-child(4){right:25%;bottom:8%}
+.player:nth-child(5){right:4%;bottom:25%}
+.player:nth-child(1) .playerHead{transform:translateX(-20%)}
+.player:nth-child(5) .playerHead{transform:translateX(-80%)}
+.tableActions{position:absolute;left:50%;bottom:1.5%;transform:translateX(-50%);display:flex;gap:12px;padding:12px 14px;background:#070b09ee;border:1px solid #765421;border-radius:18px;box-shadow:0 12px 30px #000b;z-index:80}
+.actionBtn{border-radius:6px;height:52px;min-width:150px;color:#fff;font-weight:900;font-size:15px;padding:0 22px}
+.actionBtn.hit{background:linear-gradient(#18a654,#0d713b)}
+.actionBtn.stand{background:linear-gradient(#d52f3d,#a31f2b)}
+.actionBtn.double{background:linear-gradient(#3b70ba,#285391)}
+.playButtons{position:fixed;left:-10000px;opacity:0;pointer-events:none}
+.systemLog{height:52px;border-radius:8px;background:#060808;border-color:#252a27}
+.rulesMini{font-size:10px}
+.bottomBar{height:160px;grid-template-columns:180px 1fr 175px 190px 0;gap:14px;padding:12px 18px;background:#030404;border-top:1px solid #282c29}
+.chipTray{gap:18px}
+.chip{width:68px;height:68px}
+.wallet,.totalBet{height:88px;background:#080b0a;border:1px solid #282e2a}
+.wallet strong,.totalBet strong{font-size:20px;color:#f2c74f}
+.clearBtn{height:48px;background:linear-gradient(#d3313e,#a6212c);font-weight:900}
+.resultBox{display:none}
+#betTotal{font-size:20px}
+#effects{z-index:500}
+
+/* The action buttons are now mirrored into the table center. */

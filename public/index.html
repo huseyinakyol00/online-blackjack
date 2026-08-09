@@ -31,9 +31,9 @@
     <button id="next" class="sideBtn gold hidden">↻ Yeni El</button>
     <div id="playBox" class="playButtons hidden">
       <div class="yourTurnLabel">SENİN SIRAN</div>
-      <button id="hit" class="sideBtn green">🃏 TAŞ ÇEK</button>
-      <button id="stand" class="sideBtn red">✋ KAL</button>
-      <button id="double" class="sideBtn blue">× 2 DOUBLE</button>
+      <button id="hit" class="actionBtn hit">🃏 TAŞ ÇEK</button>
+      <button id="stand" class="actionBtn stand">✋ KAL</button>
+      <button id="double" class="actionBtn double">× 2 DOUBLE</button>
     </div>
     <div id="hostBox" class="hostBox hidden">
       <div id="hostLabel">👑 ODA SAHİBİ</div>
@@ -60,6 +60,11 @@
 
         <div class="deckVisual"><div class="deckBack"></div><div class="deckBack second"></div></div>
         <div id="players" class="tablePlayers"></div>
+        <div id="tableActions" class="tableActions hidden">
+          <button id="tableHit" class="actionBtn hit">🃏 TAŞ ÇEK</button>
+          <button id="tableStand" class="actionBtn stand">✋ KAL</button>
+          <button id="tableDouble" class="actionBtn double">× 2 DOUBLE</button>
+        </div>
         <div id="effects"></div>
       </div>
     </div>
@@ -82,8 +87,8 @@
   </div>
   <input id="bet" type="hidden" value="10">
 <div class="totalBet"><span>Toplam Bahis</span><strong>🪙 <b id="betTotal">10</b></strong></div>
-  <div class="wallet"><span>Bakiye</span><strong id="myBalance">1000</strong></div>
-  <button id="clearBet" class="clearBtn">↺ Bahsi Temizle</button>
+  <div class="wallet"><span>BAKİYEN</span><strong>🪙 <b id="myBalance">1000</b></strong></div>
+  <button id="clearBet" class="clearBtn">🗑 Bahisleri Temizle</button>
   <div id="myResult" class="resultBox">—</div>
 </div>
 
