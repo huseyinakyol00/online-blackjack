@@ -212,7 +212,7 @@ detectEffects = function(prev,now){
 
 
 // ===== Final casino chip controls =====
-let selectedBet=0;
+
 const chipTrayFinal=document.getElementById("chipTray");
 chipTrayFinal?.addEventListener("click",e=>{
   const btn=e.target.closest(".chip"); if(!btn)return;
