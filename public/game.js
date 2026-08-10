@@ -208,6 +208,26 @@ detectEffects = function(prev,now){
 
 
 
+
+function flyChips(amount,targetEl){
+  const effects=document.getElementById("effects"), tray=document.getElementById("chipTray");
+  const target=targetEl||document.getElementById("betTotal");
+  if(!effects||!tray||!target)return;
+  const s=tray.getBoundingClientRect(), t=target.getBoundingClientRect();
+  const cls=chipClassFor(amount);
+  for(let i=0;i<Math.min(8,Math.max(2,Math.ceil(amount/50)));i++){
+    const c=document.createElement("div");
+    c.className="flyingChip "+cls;c.textContent=amount;
+    c.style.left=(s.left+s.width/2+(Math.random()*80-40))+"px";
+    c.style.top=(s.top+s.height/2)+"px";
+    c.style.setProperty("--dx",(Math.random()*120-60)+"px");
+    c.style.setProperty("--dy",(Math.random()*-100-20)+"px");
+    c.style.setProperty("--tx",(t.left+t.width/2-s.left-s.width/2)+"px");
+    c.style.setProperty("--ty",(t.top+t.height/2-s.top-s.height/2)+"px");
+    effects.appendChild(c);setTimeout(()=>c.remove(),900);
+  }
+}
+
 // ===== Final casino chip controls =====
 const chipTrayFinal=document.getElementById("chipTray");
 chipTrayFinal?.addEventListener("click",e=>{
@@ -275,4 +295,50 @@ render=function(){
   const me=state?.players?.find(p=>p.id===myId);
   const myTurn=!!(me && state?.phase==="playing" && state?.currentPlayerId===myId);
   document.getElementById("tableActions")?.classList.toggle("hidden",!myTurn);
+};
+
+
+function showRoundBanner(){
+  const b=document.getElementById("roundBanner");if(!b)return;
+  b.classList.remove("hidden");b.textContent="✦ YENİ EL BAŞLADI! ✦";
+  clearTimeout(window.__roundBannerTimer);
+  window.__roundBannerTimer=setTimeout(()=>b.classList.add("hidden"),2200);
+}
+function showResultOverlay(me,delta){
+  const o=document.getElementById("winOverlay");if(!o||!me)return;
+  const r=me.result||"";
+  let type="push",title="EL BİTTİ",amount="";
+  if(r==="Kazandın"||r.startsWith("Blackjack")){type="win";title="KAZANDIN!";amount=delta>0?`+${delta} 🪙`:"Kazandın 🎉"}
+  else if(r==="Kaybettin"||r==="21'i geçtin"){type="lose";title=r==="21'i geçtin"?"YANDIN!":"KAYBETTİN";amount=delta<0?`${delta} 🪙`:""}
+  else if(r.toLowerCase().includes("beraber")){type="push";title="BERABERE";amount="Bahsin iade edildi"}
+  else {type="push";title=r||"EL BİTTİ"}
+  o.className=`winOverlay ${type} show`;
+  o.innerHTML=`<div class="winTitle">${title}</div><div class="winAmount">${amount}</div><div class="winSub">${escapeHtml(r)}</div>`;
+  clearTimeout(window.__resultTimer);
+  window.__resultTimer=setTimeout(()=>o.classList.remove("show"),2600);
+  if(type==="win")sparkleResult();
+}
+function sparkleResult(){
+  const o=document.getElementById("winOverlay");if(!o)return;
+  const r=o.getBoundingClientRect();
+  for(let i=0;i<22;i++){
+    const s=document.createElement("div");s.className="resultSpark";
+    s.style.left=(r.left+r.width/2)+"px";s.style.top=(r.top+r.height/2)+"px";
+    s.style.setProperty("--sx",(Math.random()*260-130)+"px");
+    s.style.setProperty("--sy",(Math.random()*240-120)+"px");
+    document.getElementById("effects").appendChild(s);setTimeout(()=>s.remove(),950);
+  }
+}
+
+
+const __detectEffectsBeforeFeedback=detectEffects;
+detectEffects=function(prev,now){
+  __detectEffectsBeforeFeedback(prev,now);
+  if(prev.phase!=="playing" && now.phase==="playing") showRoundBanner();
+  if(prev.phase!=="finished" && now.phase==="finished"){
+    const me=now.players.find(p=>p.id===myId);
+    const oldMe=prev.players.find(p=>p.id===myId);
+    const delta=me&&oldMe?Number(me.chips)-Number(oldMe.chips):0;
+    if(me)showResultOverlay(me,delta);
+  }
 };

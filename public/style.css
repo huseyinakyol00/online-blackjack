@@ -193,3 +193,54 @@ box-shadow:inset 0 0 110px #0008,0 20px 45px #000b}
 #effects{z-index:500}
 
 /* The action buttons are now mirrored into the table center. */
+
+/* ===== FINAL POLISH: centered chips + round/win feedback ===== */
+.bottomBar{
+  height:160px;
+  grid-template-columns:minmax(560px,1fr) 165px 165px 190px;
+  gap:14px;
+  padding:12px 18px;
+}
+.bottomBar .chipTray{grid-column:1;justify-content:center;min-width:0;overflow:visible}
+.bottomBar .totalBet{grid-column:2}
+.bottomBar .wallet{grid-column:3}
+.bottomBar .clearBtn{grid-column:4}
+.bottomBar .resultBox{display:none}
+.roundBanner{
+  position:fixed;top:9px;left:50%;transform:translateX(-50%);
+  z-index:1000;padding:9px 28px;border:1px solid #b9892e;border-radius:22px;
+  background:linear-gradient(180deg,#21170a,#090705);
+  color:#f4ca5a;font-weight:900;letter-spacing:1px;font-size:16px;
+  box-shadow:0 0 20px #d6a53655, inset 0 0 14px #e3bd4a22;
+  animation:roundBannerIn .45s ease-out,roundBannerGlow 1.4s ease-in-out infinite alternate;
+}
+@keyframes roundBannerIn{from{opacity:0;transform:translate(-50%,-20px) scale(.9)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes roundBannerGlow{to{box-shadow:0 0 34px #e9bb4f99,inset 0 0 20px #e3bd4a33}}
+.winOverlay{
+  position:fixed;right:30px;top:50%;transform:translateY(-50%);
+  z-index:950;min-width:230px;padding:24px 30px;text-align:center;
+  border:1px solid #d9a83e;border-radius:16px;
+  background:linear-gradient(145deg,#181106ee,#050505f5);
+  box-shadow:0 0 30px #dcae3e77,0 20px 55px #000b;
+  pointer-events:none;
+}
+.winOverlay .winTitle{font-size:25px;font-weight:1000;color:#f4ca58}
+.winOverlay .winAmount{font-size:28px;font-weight:1000;color:#fff;margin-top:8px}
+.winOverlay .winSub{font-size:12px;color:#aaa;margin-top:6px}
+.winOverlay.win{border-color:#45d36d;box-shadow:0 0 35px #32d56577,0 20px 55px #000b}
+.winOverlay.win .winTitle{color:#55e978}
+.winOverlay.lose{border-color:#d64a56}
+.winOverlay.lose .winTitle{color:#ff6672}
+.winOverlay.push{border-color:#d5ad4d}
+.winOverlay.push .winTitle{color:#f2ca5a}
+.winOverlay.show{animation:resultIn .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes resultIn{from{opacity:0;transform:translate(80px,-50%) scale(.75)}to{opacity:1;transform:translate(0,-50%) scale(1)}}
+.resultSpark{
+  position:fixed;z-index:960;width:7px;height:7px;border-radius:50%;
+  background:#f5cf63;box-shadow:0 0 12px #f5cf63;pointer-events:none;
+  animation:sparkFly .9s ease-out forwards
+}
+@keyframes sparkFly{from{opacity:1;transform:translate(0,0) scale(1)}to{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.1)}}
+@media(max-width:1100px){
+  .bottomBar{grid-template-columns:minmax(420px,1fr) 145px 145px 170px}
+}
