@@ -4,8 +4,8 @@ document.querySelectorAll("[data-game]").forEach(btn=>btn.onclick=()=>{
   selectedGame=btn.dataset.game;
   const o=selectedGame==="okey";
   document.getElementById("selectedIcon").textContent=o?"🀄":"♠";
-  document.getElementById("selectedTitle").textContent=o?"OKEY":"BLACKJACK";
-  document.getElementById("selectedDesc").textContent=o?"4 kişilik online Okey masası":"5 kişiye kadar online Blackjack masası";
+  document.getElementById("selectedTitle").textContent=o?"101 OKEY":"BLACKJACK";
+  document.getElementById("selectedDesc").textContent=o?"4 kişilik online 101 Okey masası":"5 kişiye kadar online Blackjack masası";
   modal.classList.remove("hidden");nameInput.focus();
 });
 document.getElementById("closeModal").onclick=()=>modal.classList.add("hidden");

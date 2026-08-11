@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Online Okey</title>
+<title>Online 101 Okey</title>
 <link rel="stylesheet" href="okey.css">
 </head>
 <body>
 <div id="join" class="join">
   <div class="joinCard">
-    <div class="logo">🀄 OKEY</div>
-    <p>4 kişilik online masa</p>
+    <div class="logo">🀄 101 OKEY</div>
+    <p>4 kişilik online 101 Okey masası</p>
     <input id="name" placeholder="Oyuncu adın" maxlength="16">
     <input id="room" placeholder="Oda kodu" maxlength="12">
     <button id="enter">MASAYA GİR</button>
@@ -21,7 +21,7 @@
 <div id="game" class="hidden">
 <header>
   <a href="/" class="back">← Oyunlar</a>
-  <div class="brand">🀄 OKEY <span>Oda: <b id="roomLabel">-</b></span></div>
+  <div class="brand">🀄 101 OKEY <span>Oda: <b id="roomLabel">-</b></span></div>
   <div class="headerRight">
     <div id="topMessage"></div>
     <button id="soundToggle" class="soundBtn">🔊 Ses Açık</button>
@@ -30,7 +30,7 @@
 
 <main>
   <aside class="side">
-    <div class="title">OKEY MASASI</div>
+    <div class="title">101 OKEY</div>
     <button id="start">▶ Oyunu Başlat</button>
     <button id="reset" class="red hidden">↻ Masayı Sıfırla</button>
     <div class="line"></div>
@@ -38,11 +38,12 @@
     <div class="line"></div>
     <div>OYUNCULAR <b id="count">0/4</b></div>
     <div id="players"></div>
+    <div class="scoreTitle">Çetele</div>
+    <div id="scores"></div>
     <div class="help">
-      <b>Nasıl oynanır?</b><br>
-      Sıra sende olduğunda ortadan veya atılan taştan bir taş al.
-      Ardından elinden bir taş seçip <b>TAŞI AT</b>.
-      14 taşla bitir.
+      <b>Istaka:</b> Taşları sürükleyerek iki kata istediğin gibi diz.<br><br>
+      <b>Aç:</b> Seri açmak için seçili taşların toplamı en az 101 olmalı. Çift için 5 çift seç.<br><br>
+      <b>İşle:</b> Elini açtıktan sonra bir taşı seç, masadaki per'e tıkla ve İŞLE'ye bas.
     </div>
   </aside>
 
@@ -57,44 +58,53 @@
       </div>
 
       <div class="centerPile">
-        <div class="pileLabel">ATILAN</div>
-        <div id="discardTile" class="discardTile">—</div>
-        <div class="wallVisual">
-          <div class="wallTiles">
-            <i></i><i></i><i></i><i></i><i></i>
+        <div class="pileBox">
+          <div class="pileLabel">ATILAN</div>
+          <div id="discardTile" class="discardTile">—</div>
+        </div>
+        <div class="pileBox">
+          <div class="wallVisual">
+            <div class="wallTiles"><i></i><i></i><i></i><i></i><i></i></div>
+            <span>ORTA <b id="wallCount">0</b></span>
           </div>
-          <span>ORTA <b id="wallCount">0</b></span>
         </div>
       </div>
 
-      <div id="seats"></div>
-
-      <div id="turnNotice" class="turnNotice hidden">
-        <span class="turnDot"></span> SIRA SENDE
+      <div id="meldArea" class="meldArea">
+        <div class="meldTitle">MASA / AÇILAN PERLER</div>
       </div>
 
+      <div id="seats"></div>
+      <div id="turnNotice" class="turnNotice hidden"><span class="turnDot"></span> SIRA SENDE</div>
       <div id="roundFx" class="roundFx"></div>
     </div>
 
     <div class="handBar">
       <div class="handTitle">
-        <span>ISTAKA</span>
+        <span>İSTAKA</span>
         <span id="handHint">4 oyuncu bekleniyor</span>
       </div>
-      <div class="rack">
-        <div id="hand" class="hand"></div>
+
+      <div class="rack" id="rack">
+        <div class="rackRow" id="row0"></div>
+        <div class="rackDivider"></div>
+        <div class="rackRow" id="row1"></div>
       </div>
+
       <div class="actions">
         <button id="draw">🀄 ORTADAN ÇEK</button>
         <button id="take" class="purple">↙ ATILANI AL</button>
-        <button id="discard" class="gold">↗ TAŞI AT</button>
+        <button id="openRun" class="gold">101 AÇ</button>
+        <button id="openPairs" class="violet">5 ÇİFT AÇ</button>
+        <button id="lay" class="blue">↗ İŞLE</button>
+        <button id="discard" class="redAction">TAŞI AT</button>
       </div>
+      <div class="selectionInfo">Seçili: <b id="selectedCount">0</b> taş <span>• Taşı sürükle, yerini değiştir</span></div>
     </div>
   </section>
 </main>
 <div id="toast" class="toast hidden"></div>
 </div>
-
 <script src="/socket.io/socket.io.js"></script>
 <script src="okey.js"></script>
 </body>

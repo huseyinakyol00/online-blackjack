@@ -119,3 +119,98 @@ main{height:calc(100vh - 58px);display:grid;grid-template-columns:220px 1fr;gap:
  .seat{width:180px}.tile{width:39px;height:55px;font-size:17px}
  .opponentRack{min-width:155px}
 }
+
+/* ===== 101 OKEY V3 ===== */
+.scoreTitle{margin-top:14px;padding-top:10px;border-top:1px solid #242d27;color:#e6c35b;font-size:11px}
+.scoreRow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1c241f;font-size:10px}
+.scoreRow b{color:#e5c05a}
+
+.meldArea{
+ position:absolute;left:14%;right:14%;top:23%;bottom:19%;
+ display:flex;flex-wrap:wrap;align-content:flex-start;justify-content:center;gap:14px;
+ z-index:12;pointer-events:auto;
+}
+.meldTitle{width:100%;text-align:center;color:#a9b3ac;font-size:9px;letter-spacing:1.5px}
+.meld{
+ min-width:150px;min-height:72px;padding:8px 10px;
+ border:1px solid #ffffff18;border-radius:9px;background:#03160dcc;
+ box-shadow:0 7px 18px #0008;cursor:pointer;
+}
+.meld.target{border-color:#e7c052;box-shadow:0 0 18px #e7c05244}
+.meldOwner{font-size:8px;color:#9ca79f;margin-bottom:5px;text-align:center}
+.meldTiles{display:flex;justify-content:center;align-items:end}
+.meldTiles .tile{width:30px;height:42px;font-size:14px;margin-left:-6px;cursor:default}
+.meldTiles .tile:first-child{margin-left:0}
+
+.centerPile{top:46%;gap:25px;z-index:28}
+.pileBox{display:flex;flex-direction:column;align-items:center}
+.pileBox .discardTile .tile{width:48px;height:66px}
+.discardTile.selectedTarget{filter:drop-shadow(0 0 12px #e5bd4b)}
+
+.seat{z-index:20}
+.seat:nth-child(1){left:2%;top:45%}
+.seat:nth-child(2){left:50%;top:2%}
+.seat:nth-child(3){right:2%;top:45%}
+.seat:nth-child(4){left:50%;bottom:1%}
+.seat:nth-child(4) .seatHand{display:none}
+.seat:nth-child(4) .seatStatus{display:none}
+
+.handBar{
+ height:246px;
+ padding:9px 14px 7px;
+}
+.rack{
+ height:132px;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:stretch;
+ padding:8px 24px;
+ gap:3px;
+}
+.rackRow{
+ height:57px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ min-width:0;
+}
+.rackDivider{
+ height:3px;
+ margin:0 4%;
+ border-radius:3px;
+ background:#b17b3b66;
+ box-shadow:0 1px 2px #000;
+}
+.rackRow .tile{
+ width:43px;height:55px;
+ margin-left:-7px;
+ flex:0 0 auto;
+ cursor:grab;
+}
+.rackRow .tile:active{cursor:grabbing}
+.rackRow .tile.dragging{opacity:.35;transform:translateY(-4px)}
+.rackRow.dropHover{background:#e8c14c0c;border-radius:8px}
+.selectionInfo{text-align:center;color:#8b948f;font-size:9px;margin-top:4px}
+.selectionInfo b{color:#e6c052}
+.selectionInfo span{margin-left:10px;color:#666}
+
+.actions{gap:7px}
+.actions button{padding:9px 12px;font-size:10px}
+.actions .violet{background:#7544a8}
+.actions .blue{background:#326eb0}
+.actions .redAction{background:#b82d3a}
+.actions button.ready{box-shadow:0 0 0 2px #e5c052,0 0 18px #e5c05255}
+
+@media(max-height:850px){
+ .handBar{height:220px}
+ .rack{height:112px}
+ .rackRow{height:48px}
+ .rackRow .tile{width:38px;height:49px;font-size:17px}
+ .meldArea{top:21%;bottom:18%}
+}
+@media(max-width:1100px){
+ .rackRow .tile{width:37px;height:50px;font-size:17px}
+ .actions button{padding:8px 8px;font-size:9px}
+ .meldArea{left:9%;right:9%}
+}

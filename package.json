@@ -1,8 +1,8 @@
 {
-  "name": "online-blackjack",
-  "version": "1.1.0",
+  "name": "online-oyunlar",
+  "version": "2.0.0",
   "private": true,
-  "description": "5 kisilik online Blackjack - casino chip UI",
+  "description": "5 kisilik Blackjack ve 4 kisilik online 101 Okey",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
