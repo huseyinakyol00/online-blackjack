@@ -18,14 +18,14 @@ let bonusMode=false,bonusMultiplierTotal=0,bonusMultiplierLog=[],bonusAccumWin=0
 function pickSymbol(){
  const total=SYMBOLS.reduce((a,s)=>a+s.weight,0);
  let r=Math.random()*total;
- for(const s of SYMBOLS){r-=s.weight;if(r<=0)return s}
- return SYMBOLS[0];
+ for(const s of SYMBOLS){r-=s.weight;if(r<=0)return {...s}}
+ return {...SYMBOLS[0]};
 }
 function makeGrid(){
  const g=Array.from({length:COLS*ROWS},()=>pickSymbol());
  if(!g.some(s=>s.wild)&&Math.random()<.58){
   const n=Math.random()<.12?2:1;
-  for(let i=0;i<n;i++)g[Math.floor(Math.random()*g.length)]=SYMBOLS.find(s=>s.id==="wild");
+  for(let i=0;i<n;i++)g[Math.floor(Math.random()*g.length)]={...SYMBOLS.find(s=>s.id==="wild")};
  }
  return g;
 }
@@ -36,27 +36,22 @@ function neighbors(i){
  return a;
 }
 function groups(){
- const seen=new Set(),out=[];
+ const by=new Map();
  for(let i=0;i<grid.length;i++){
-   if(seen.has(i)||grid[i].scatter||grid[i].wild)continue;
-   const id=grid[i].id, stack=[i],g=[];seen.add(i);
-   while(stack.length){
-     const n=stack.pop();g.push(n);
-     for(const q of neighbors(n)){
-       if(!seen.has(q)&&grid[q]&&!grid[q].scatter&&!grid[q].wild&&grid[q].id===id){seen.add(q);stack.push(q)}
-     }
-   }
-   if(g.length>=8)out.push(g);
+   const s=grid[i];
+   if(!s||s.scatter||s.wild)continue;
+   if(!by.has(s.id))by.set(s.id,[]);
+   by.get(s.id).push(i);
  }
- return out;
+ return [...by.values()].filter(ids=>ids.length>=8);
 }
 function wildBonus(){
  return grid.reduce((a,s)=>a+(s?.wild?1:0),0);
 }
 const MULTIPLIER_WEIGHTS=[
- {value:2,weight:35},{value:5,weight:25},{value:10,weight:15},{value:25,weight:8},
- {value:50,weight:5},{value:100,weight:4},{value:500,weight:3},{value:1000,weight:2},
- {value:2500,weight:1.5},{value:5000,weight:1.5}
+ {value:2,weight:45},{value:5,weight:25},{value:10,weight:15},{value:25,weight:7},
+ {value:50,weight:4},{value:100,weight:2},{value:500,weight:1},{value:1000,weight:0.5},
+ {value:2500,weight:0.3},{value:5000,weight:0.2}
 ];
 function pickMultiplier(){let r=Math.random()*100;for(const m of MULTIPLIER_WEIGHTS){r-=m.weight;if(r<=0)return m.value}return 2}
 function multiplierCells(){const a=[];grid.forEach((s,i)=>{if(s?.wild)a.push({i,value:pickMultiplier()})});return a}
@@ -196,49 +191,110 @@ function bigWin(amount){
 }
 
 grid=makeGrid();render();renderMultiplierBank();await sleep(300);
- let total=0,multiTotal=0,cascade=0;
+
+ let total=0,cascade=0;
+ let spinMultiplier=0;
  const collectedWilds=new Set();
  const scat=scatterCount();
- if(scat>=4){
-   if(bonusMode){freeSpins+=15;$("featureText").textContent="⚡ +15 FREE SPIN";showWin("⚡ +15 FREE SPIN");sfxBonus()}
-   else bonusPending=true;
+
+ // Four+ scatters in base game trigger the feature after this spin.
+ if(scat>=4 && !bonusMode) bonusPending=true;
+
+ // Three+ scatters during the feature award five extra free spins.
+ if(scat>=3 && bonusMode){
+   freeSpins+=5;
+   $("featureText").textContent=`⚡ +5 FREE SPIN`;
+   showWin("⚡ +5 FREE SPIN");sfxBonus();
  }
+
  while(true){
    const gs=groups();
-   const mults=multiplierCells().filter(m=>!collectedWilds.has(grid[m.i]));
-   mults.forEach(m=>{
-     collectedWilds.add(grid[m.i]);
-     floatingMultiplier(m.value);addMultiplier(m.value);
-   });
-   multiTotal=bonusMultiplierTotal;
+
+   // IMPORTANT:
+   // A multiplier is ONLY captured if this tumble actually has a win.
+   // If the board has x10 but no 8+ winning symbols, x10 is lost.
    if(!gs.length)break;
+
+   const mults=multiplierCells().filter(m=>!collectedWilds.has(grid[m.i]));
+   let landedThisTumble=0;
+   mults.forEach(m=>{
+     const symbol=grid[m.i];
+     if(!symbol)return;
+     collectedWilds.add(symbol);
+     landedThisTumble+=m.value;
+   });
+
+   if(landedThisTumble>0){
+     mults.forEach(m=>{
+       const symbol=grid[m.i];
+       if(symbol && collectedWilds.has(symbol)){
+         floatingMultiplier(m.value);
+       }
+     });
+     spinMultiplier+=landedThisTumble;
+     if(bonusMode){
+       bonusMultiplierTotal+=landedThisTumble;
+       bonusMultiplierLog.push(...mults.map(m=>m.value));
+       renderMultiplierBank(landedThisTumble);
+     }
+   }
+
    cascade++;
    const indices=[...new Set(gs.flat())];
    setCellsWin(indices);burstAtGrid(indices);sfxWin();
-   let base=0;gs.forEach(g=>base+=bet*groupPay(g.length));
-   total+=base;multiTotal=bonusMultiplierTotal;
-   if(base>0)showWin(`+${Math.floor(base)} ⚡`);
+
+   let base=0;
+   gs.forEach(g=>base+=bet*groupPay(g.length));
+
+   // Base game: multipliers captured by this winning tumble multiply this win.
+   // Free spins: the running bonus multiplier applies to each new win.
+   const appliedMultiplier=bonusMode
+     ? (bonusMultiplierTotal>0?bonusMultiplierTotal:1)
+     : (spinMultiplier>0?spinMultiplier:1);
+
+   const tumbleWin=base*appliedMultiplier;
+   total+=tumbleWin;
+
+   showWin(
+     appliedMultiplier>1
+       ? `+${Math.floor(tumbleWin)} • x${appliedMultiplier}`
+       : `+${Math.floor(tumbleWin)} ⚡`
+   );
+
    await sleep(430);
    const cells=[...$("grid").children];
    indices.forEach(i=>{if(cells[i])cells[i].textContent=""});
    await sleep(120);
-   const removed=new Set(indices);grid=grid.map((s,i)=>removed.has(i)?null:s);fall(true);
-   render();await sleep(260);
+
+   const removed=new Set(indices);
+   grid=grid.map((s,i)=>removed.has(i)?null:s);
+   fall(true);
+   render();
+   await sleep(260);
  }
+
+ // Bonus wins are accumulated for this free spin, then paid at the end of the spin.
  if(bonusMode){
    bonusAccumWin+=total;
    total=0;
- }else if(multiTotal>0 && total>0) total*=multiTotal;
+ }
+ // Base-game spin has already applied its captured multiplier per winning tumble.
+
  // Scatter feedback
  if(scat>=4){
-   $("featureText").textContent=bonusMode?`⚡ ${scat} SCATTER • +15 FREE SPIN`:`⚡ ${scat} SCATTER • 15 FREE SPIN`;
+   $("featureText").textContent=bonusMode
+     ? `⚡ ${scat} SCATTER • +5 FREE SPIN`
+     : `⚡ ${scat} SCATTER • 15 FREE SPIN`;
    if(!bonusMode)showWin(`⚡ ${scat} SCATTER`);
    await sleep(500);
  }
+
  if(total>0){
-   balance+=total;lastWin=total;
+   balance+=total;
+   lastWin=total;
    $("win").textContent=Math.floor(total).toLocaleString("tr-TR");
-   bigWin(total);spawnSpark(innerWidth*.5,innerHeight*.5,55);
+   bigWin(total);
+   spawnSpark(innerWidth*.5,innerHeight*.5,55);
    toast(`Kazanç +${Math.floor(total).toLocaleString("tr-TR")}`);
  }else lastWin=0;
  localStorage.setItem("olympusBalance",Math.floor(balance));
@@ -255,15 +311,14 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
    showWin("⚡ FREE SPIN");
    setTimeout(()=>{if(freeSpins>0&&!busy)spin()},850);
  }else if(bonusMode && freeSpins<=0){
-   const finalBonusMultiplier=bonusMultiplierTotal>0?bonusMultiplierTotal:1;
-   const finalBonusWin=bonusAccumWin*finalBonusMultiplier;
+   const finalBonusWin=bonusAccumWin;
    if(finalBonusWin>0){
      balance+=finalBonusWin;lastWin=finalBonusWin;
      bigWin(finalBonusWin);
      toast(`FREE SPIN KAZANCI +${Math.floor(finalBonusWin).toLocaleString("tr-TR")}`);
    }
    bonusMode=false;
-   $("featureText").textContent=`BONUS BİTTİ • x${bonusMultiplierTotal>0?bonusMultiplierTotal:1}`;
+   $("featureText").textContent=`BONUS BİTTİ • TOPLAM x${bonusMultiplierTotal>0?bonusMultiplierTotal:1}`;
    localStorage.setItem("olympusBalance",Math.floor(balance));
    renderMultiplierBank();
  }else if(auto&&!busy&&(freeSpins>0||balance>=bet)){

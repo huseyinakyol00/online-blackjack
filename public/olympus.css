@@ -123,3 +123,5 @@ body{overflow-x:hidden}
 @media(max-width:1250px){.multiplierPanel{right:8px;width:110px}.slotShell{padding-right:132px}}@media(max-width:900px){.multiplierPanel{position:relative;top:auto;right:auto;width:auto;margin:10px 12px;min-height:auto}.multList{flex-direction:row;flex-wrap:wrap;max-height:none}.multChip{min-width:80px}.slotShell{padding-right:12px}}
 
 .multOdds{font-size:6px;line-height:1.45;text-align:center;color:#666;margin:5px -2px 8px;padding-top:5px;border-top:1px solid #ffffff0a}
+
+.multCaptureHint{font-size:6px;line-height:1.35;text-align:center;color:#8e815f;margin:5px 0 7px}
