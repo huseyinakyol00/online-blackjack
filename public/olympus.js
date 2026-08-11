@@ -22,7 +22,12 @@ function pickSymbol(){
  return SYMBOLS[0];
 }
 function makeGrid(){
- return Array.from({length:COLS*ROWS},()=>pickSymbol());
+ const g=Array.from({length:COLS*ROWS},()=>pickSymbol());
+ if(!g.some(s=>s.wild)&&Math.random()<.58){
+  const n=Math.random()<.12?2:1;
+  for(let i=0;i<n;i++)g[Math.floor(Math.random()*g.length)]=SYMBOLS.find(s=>s.id==="wild");
+ }
+ return g;
 }
 function idx(x,y){return y*COLS+x}
 function neighbors(i){
@@ -48,31 +53,16 @@ function groups(){
 function wildBonus(){
  return grid.reduce((a,s)=>a+(s?.wild?1:0),0);
 }
-const MULTIPLIERS=[5000,2500,1000,500,100,50,25,10,5,2];
-function multiplierCells(){
- const a=[];
- grid.forEach((s,i)=>{
-  if(s?.wild)a.push({i,value:MULTIPLIERS[Math.floor(Math.random()*MULTIPLIERS.length)]});
- });
- return a;
-}
-function resetMultiplierBank(){
- bonusMultiplierTotal=0;bonusMultiplierLog=[];
- renderMultiplierBank();
-}
-function addMultiplier(value){
- bonusMultiplierTotal+=value;
- bonusMultiplierLog.push(value);
- renderMultiplierBank(value);
-}
-function renderMultiplierBank(newValue=0){
- const el=$("multTotal"),mode=$("multMode"),list=$("multList");
- if(!el)return;
- el.textContent=`x${bonusMultiplierTotal}`;
- mode.textContent=bonusMode?"FREE SPINS • BİRİKİYOR":"NORMAL SPIN";
- const v=bonusMultiplierLog.slice(-12);
- list.innerHTML=v.map((n,i)=>`<div class="multChip ${newValue===n&&i===v.length-1?"new":""}"><span>⚡</span><b>x${n}</b></div>`).join("");
-}
+const MULTIPLIER_WEIGHTS=[
+ {value:2,weight:35},{value:5,weight:25},{value:10,weight:15},{value:25,weight:8},
+ {value:50,weight:5},{value:100,weight:4},{value:500,weight:3},{value:1000,weight:2},
+ {value:2500,weight:1.5},{value:5000,weight:1.5}
+];
+function pickMultiplier(){let r=Math.random()*100;for(const m of MULTIPLIER_WEIGHTS){r-=m.weight;if(r<=0)return m.value}return 2}
+function multiplierCells(){const a=[];grid.forEach((s,i)=>{if(s?.wild)a.push({i,value:pickMultiplier()})});return a}
+function resetMultiplierBank(){bonusMultiplierTotal=0;bonusMultiplierLog=[];renderMultiplierBank()}
+function addMultiplier(value){bonusMultiplierTotal+=value;bonusMultiplierLog.push(value);renderMultiplierBank(value)}
+function renderMultiplierBank(newValue=0){const el=$("multTotal"),mode=$("multMode"),list=$("multList");if(!el)return;el.textContent=`x${bonusMultiplierTotal}`;mode.textContent=bonusMode?"FREE SPINS • BİRİKİYOR":"NORMAL SPIN";const v=bonusMultiplierLog.slice(-12);list.innerHTML=v.map((n,i)=>`<div class="multChip ${newValue===n&&i===v.length-1?"new":""}"><span>⚡</span><b>x${n}</b></div>`).join("")}
 function scatterCount(){return grid.filter(s=>s?.scatter).length}
 function groupPay(n){
  if(n>=18)return 15;
@@ -207,25 +197,27 @@ function bigWin(amount){
 
 grid=makeGrid();render();renderMultiplierBank();await sleep(300);
  let total=0,multiTotal=0,cascade=0;
+ const collectedWilds=new Set();
  const scat=scatterCount();
- if(scat>=4)bonusPending=true;
+ if(scat>=4){
+   if(bonusMode){freeSpins+=15;$("featureText").textContent="⚡ +15 FREE SPIN";showWin("⚡ +15 FREE SPIN");sfxBonus()}
+   else bonusPending=true;
+ }
  while(true){
    const gs=groups();
-   const mults=multiplierCells();
-   if(!gs.length){
-     if(mults.length&&cascade>0){multiTotal+=mults.reduce((a,m)=>a+m.value,0)}
-     break;
-   }
+   const mults=multiplierCells().filter(m=>!collectedWilds.has(grid[m.i]));
+   mults.forEach(m=>{
+     collectedWilds.add(grid[m.i]);
+     floatingMultiplier(m.value);addMultiplier(m.value);
+   });
+   multiTotal=bonusMultiplierTotal;
+   if(!gs.length)break;
    cascade++;
    const indices=[...new Set(gs.flat())];
    setCellsWin(indices);burstAtGrid(indices);sfxWin();
-   let base=0;
-   gs.forEach(g=>base+=bet*groupPay(g.length));
-   const directMult=mults.reduce((a,m)=>a+m.value,0);
-   mults.forEach(m=>{floatingMultiplier(m.value);addMultiplier(m.value)});
-   total+=base;
-   multiTotal=bonusMultiplierTotal;
-   showWin(`+${Math.floor(base)} ⚡`);
+   let base=0;gs.forEach(g=>base+=bet*groupPay(g.length));
+   total+=base;multiTotal=bonusMultiplierTotal;
+   if(base>0)showWin(`+${Math.floor(base)} ⚡`);
    await sleep(430);
    const cells=[...$("grid").children];
    indices.forEach(i=>{if(cells[i])cells[i].textContent=""});
@@ -237,12 +229,11 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
    bonusAccumWin+=total;
    total=0;
  }else if(multiTotal>0 && total>0) total*=multiTotal;
- // Scatter-only bonus feedback.
+ // Scatter feedback
  if(scat>=4){
-   bonusPending=true;
-   $("featureText").textContent=`⚡ ${scat} SCATTER — BONUS KAZANDIN`;
-   sfxBonus();showWin(`⚡ ${scat} SCATTER`);
-   await sleep(700);
+   $("featureText").textContent=bonusMode?`⚡ ${scat} SCATTER • +15 FREE SPIN`:`⚡ ${scat} SCATTER • 15 FREE SPIN`;
+   if(!bonusMode)showWin(`⚡ ${scat} SCATTER`);
+   await sleep(500);
  }
  if(total>0){
    balance+=total;lastWin=total;
@@ -264,14 +255,15 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
    showWin("⚡ FREE SPIN");
    setTimeout(()=>{if(freeSpins>0&&!busy)spin()},850);
  }else if(bonusMode && freeSpins<=0){
-   const finalBonusWin=bonusAccumWin*bonusMultiplierTotal;
+   const finalBonusMultiplier=bonusMultiplierTotal>0?bonusMultiplierTotal:1;
+   const finalBonusWin=bonusAccumWin*finalBonusMultiplier;
    if(finalBonusWin>0){
      balance+=finalBonusWin;lastWin=finalBonusWin;
      bigWin(finalBonusWin);
      toast(`FREE SPIN KAZANCI +${Math.floor(finalBonusWin).toLocaleString("tr-TR")}`);
    }
    bonusMode=false;
-   $("featureText").textContent=`BONUS BİTTİ • x${bonusMultiplierTotal}`;
+   $("featureText").textContent=`BONUS BİTTİ • x${bonusMultiplierTotal>0?bonusMultiplierTotal:1}`;
    localStorage.setItem("olympusBalance",Math.floor(balance));
    renderMultiplierBank();
  }else if(auto&&!busy&&(freeSpins>0||balance>=bet)){
