@@ -244,3 +244,270 @@ box-shadow:inset 0 0 110px #0008,0 20px 45px #000b}
 @media(max-width:1100px){
   .bottomBar{grid-template-columns:minmax(420px,1fr) 145px 145px 170px}
 }
+
+/* ===== USER-APPROVED REFERENCE IMAGE IMPLEMENTATION ===== */
+html,body{background:#020303}
+.topbar{
+  height:58px;
+  padding:0 20px;
+  background:linear-gradient(180deg,#090908,#030303);
+  border-bottom:1px solid #5f4618;
+}
+.brand{font-family:Georgia,serif;color:#f3cc62;font-size:20px}
+.brand span{font-family:Arial,sans-serif;color:#d8b45b}
+.headerRight{font-size:13px}
+
+.casinoLayout{
+  height:calc(100vh - 58px - 164px);
+  display:block;
+  position:relative;
+  padding:0;
+  overflow:hidden;
+}
+.controlPanel{
+  position:absolute;
+  z-index:100;
+  left:12px;
+  top:12px;
+  width:210px;
+  height:calc(100% - 24px);
+  padding:14px 12px;
+  border-radius:9px;
+  background:linear-gradient(180deg,#0b0c0c,#050606);
+  border:1px solid #292d2a;
+}
+.controlPanel .sideTitle{color:#c8c8c8}
+.sideBtn{min-height:40px}
+.hostBox{margin-top:8px}
+.tableArea{width:100%;height:100%;display:block}
+.tableWrap{height:100%;width:100%}
+
+.felt{
+  position:absolute;
+  left:220px;
+  top:12px;
+  width:calc(100% - 235px);
+  height:calc(100% - 22px);
+  border:11px solid #2a180b;
+  border-radius:50% / 46%;
+  background:
+    radial-gradient(ellipse at 50% 43%,#0b7447 0,#075b39 45%,#06432b 73%,#042f20 100%);
+  box-shadow:inset 0 0 110px #000a,0 18px 45px #000b;
+}
+.felt:after{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:2px solid #87632966;
+  border-radius:50% / 46%;
+  pointer-events:none;
+}
+.feltPrint{
+  top:40%;
+  width:52%;
+  font-family:Georgia,serif;
+  color:#d2ad5680;
+  font-size:29px;
+  z-index:1;
+}
+.feltPrint span{font-size:12px}
+
+.dealerSpot{top:5%;z-index:50}
+.dealerLabel{
+  display:inline-block;
+  background:#063721;
+  border-radius:18px;
+  padding:5px 19px 4px;
+  font-family:Georgia,serif;
+  font-size:14px;
+}
+.dealerValue{
+  color:#f3ca5d;
+  font-weight:900;
+  border-color:#75551d;
+  background:#07110ce8;
+}
+.deckVisual{right:6%;top:7%;z-index:50}
+
+.tablePlayers{z-index:20}
+.player{
+  width:160px;
+  height:190px;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible;
+}
+.player.me{background:transparent!important}
+.player.active .playerHead{
+  border-color:#e6bd4b;
+  box-shadow:0 0 18px #e6bd4b55;
+}
+.playerHead{
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  position:absolute;
+  min-width:118px;
+  padding:6px 10px;
+  border-radius:13px;
+  background:#06120de8;
+  border:1px solid #ffffff22;
+  z-index:10;
+}
+.player .cards{
+  top:40px;
+  z-index:12;
+  min-height:78px;
+}
+.player .card{
+  width:52px;
+  height:74px;
+  font-size:20px;
+  margin-left:-13px;
+  box-shadow:0 7px 13px #000b;
+}
+.playerInfo{
+  left:50%;
+  right:auto;
+  transform:translateX(-50%);
+  bottom:0;
+  min-width:126px;
+  padding:6px 12px;
+  background:#040b08ee;
+  border:1px solid #7b5b2666;
+  border-radius:9px;
+  z-index:20;
+}
+.playerValue{
+  color:#f5cd5b;
+  font-size:15px;
+  font-weight:1000;
+  line-height:18px;
+}
+.playerBet{
+  color:#f0c64f;
+  font-size:11px;
+  font-weight:800;
+}
+.status{font-size:10px;color:#aaa}
+.player .chipPile{
+  bottom:45px;
+  z-index:25;
+}
+.chipPile .chipVisual{
+  width:29px;height:29px;font-size:8px;
+}
+
+/* Five-seat casino arc */
+.player:nth-child(1){left:4%;bottom:28%}
+.player:nth-child(2){left:24%;bottom:14%}
+.player:nth-child(3){left:50%;bottom:10%;transform:translateX(-50%)}
+.player:nth-child(4){right:24%;bottom:14%}
+.player:nth-child(5){right:4%;bottom:28%}
+.player:nth-child(1) .playerHead{transform:translateX(-25%)}
+.player:nth-child(5) .playerHead{transform:translateX(-75%)}
+
+/* Action buttons: directly on the lower center of the felt, never over the cards */
+.tableActions{
+  position:absolute;
+  left:50%;
+  bottom:2.5%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:12px;
+  padding:11px 13px;
+  background:#050806f2;
+  border:1px solid #765521;
+  border-radius:15px;
+  box-shadow:0 12px 35px #000c;
+  z-index:90;
+}
+.actionBtn{
+  min-width:150px;
+  height:50px;
+  border-radius:6px;
+  font-size:14px;
+  font-weight:1000;
+}
+.tableActions .hit{background:linear-gradient(#18a955,#0d713b)}
+.tableActions .stand{background:linear-gradient(#d53240,#a51f2c)}
+.tableActions .double{background:linear-gradient(#3d72ba,#2b5791)}
+
+/* The old invisible side controls stay functional but never occupy the table. */
+.playButtons{position:fixed;left:-99999px;opacity:0;pointer-events:none}
+
+/* System log is a full-width strip beneath the table */
+.systemLog{
+  position:absolute;
+  left:220px;
+  bottom:0;
+  width:calc(100% - 235px);
+  height:48px;
+  z-index:95;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 15px;
+  background:#070909ef;
+  border:1px solid #252b27;
+  border-radius:7px;
+  font-size:11px;
+}
+.rulesMini{font-size:10px}
+
+/* Bottom casino rail: chips centered and slightly lower, never clipped */
+.bottomBar{
+  height:164px;
+  display:grid;
+  grid-template-columns:minmax(600px,1fr) 160px 160px 170px;
+  align-items:center;
+  gap:14px;
+  padding:16px 18px 12px;
+  background:linear-gradient(180deg,#080909,#030404);
+  border-top:1px solid #252927;
+}
+.bottomBar .chipTray{
+  grid-column:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:17px;
+  padding-top:18px;
+  overflow:visible;
+}
+.bottomBar .chip{
+  width:66px;
+  height:66px;
+  font-size:15px;
+}
+.bottomBar .totalBet{grid-column:2;height:74px}
+.bottomBar .wallet{grid-column:3;height:74px}
+.bottomBar .clearBtn{grid-column:4;height:48px}
+.bottomBar .resultBox{display:none}
+
+.roundBanner{top:8px}
+
+/* Make result popups avoid the action area */
+.winOverlay{right:28px;top:38%}
+
+/* Keep the table readable on smaller desktop screens */
+@media(max-width:1200px){
+  .controlPanel{width:190px}
+  .felt{left:200px;width:calc(100% - 215px)}
+  .systemLog{left:200px;width:calc(100% - 215px)}
+  .bottomBar{grid-template-columns:minmax(500px,1fr) 145px 145px 155px}
+  .player{width:145px}
+  .player .card{width:48px;height:68px}
+}
+@media(max-height:850px) and (min-width:901px){
+  .casinoLayout{height:calc(100vh - 58px - 145px)}
+  .felt{top:8px;height:calc(100% - 16px)}
+  .bottomBar{height:145px}
+  .bottomBar .chipTray{padding-top:12px}
+  .bottomBar .chip{width:58px;height:58px}
+  .player{height:170px}
+  .player:nth-child(1){bottom:27%}.player:nth-child(2){bottom:13%}
+  .player:nth-child(3){bottom:9%}.player:nth-child(4){bottom:13%}.player:nth-child(5){bottom:27%}
+  .tableActions{bottom:2%}
+}
