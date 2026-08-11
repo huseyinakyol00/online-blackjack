@@ -12,61 +12,78 @@
 <div class="topLightning" id="topLightning"></div>
 <header class="topbar">
   <a href="/" class="back">← Oyunlar</a>
-  <div class="brand"><span>⚡</span> OLYMPUS <b>STORM</b></div>
+  <div class="brand"><span>♜</span> GATES <b>OF OLYMPUS</b></div>
   <div class="topright"><span id="modeText">DEMO</span><button id="soundBtn">🔊 Ses</button></div>
 </header>
 
-<div id="multiplierPanel" class="multiplierPanel">
-  <div class="multTitle">⚡ ÇARPANLAR</div>
-  <div class="multTotal"><span id="multTotal">x0</span></div>
-  <div class="multMode" id="multMode">NORMAL SPIN</div><div id="multCaptureHint" class="multCaptureHint">Çarpan yalnızca kazançlı tumble yakalanınca alınır.</div><div class="multOdds">2x 35% • 5x 25% • 10x 15%<br>25x 8% • 50x 5% • 100x 4%<br>500x 3% • 1000x 2% • 2500x 1.5% • 5000x 1.5%</div>
-  <div class="multList" id="multList"></div>
+<div class="gameBackdrop">
+  <div class="cloud cloud1"></div><div class="cloud cloud2"></div>
 </div>
 
-<main class="slotShell">
-  <section class="godPanel">
-    <div class="godHalo"></div>
-    <div class="godSymbol">⚡</div>
-    <div class="godName">THUNDER LORD</div>
-    <div class="godSub">ÇARPANLARIN EFENDİSİ</div>
-    <div id="multiplierBadge" class="multiplierBadge hidden">x0</div>
-  </section>
+<main class="olympusGame">
+  <aside class="leftRail">
+    <div class="railCard">
+      <div class="railCaption">TOPLAM ÇARPAN</div>
+      <div id="multTotal" class="railMultiplier">x0</div>
+      <div id="multMode" class="railMode">NORMAL SPIN</div>
+      <div id="multCaptureHint" class="railHint">Çarpan, yalnızca kazançlı spin/tumble'da alınır.</div>
+      <div id="multList" class="multList"></div>
+    </div>
+  </aside>
 
-  <section class="slotArea">
-    <div class="statusRow">
-      <div><span class="label">BAKİYE</span><strong id="balance">1000</strong></div>
-      <div class="winBox"><span class="label">KAZANÇ</span><strong id="win">0</strong></div>
-      <div class="spinInfo"><span id="featureText">8+ sembol eşleşmesi kazanır</span></div>
+  <section class="machine">
+    <div class="titlePlate">
+      <div class="gameTitle">GATES OF OLYMPUS</div>
+      <div class="gameTag">⚡ ZEUS'UN ŞİMŞEKLERİ ⚡</div>
     </div>
 
-    <div class="gridWrap">
-      <div id="grid" class="grid"></div>
-      <div id="winFlash" class="winFlash hidden"></div>
-      <div id="cascadeText" class="cascadeText"></div>
-      <div id="multiplierRain" class="multiplierRain"></div>
+    <div class="winBanner">
+      <span>TUMBLE KAZANCI</span>
+      <strong id="win">0</strong>
     </div>
 
-    <div class="controls">
+    <div class="reelStage">
+      <div class="reelFrame">
+        <div id="grid" class="grid"></div>
+        <div id="winFlash" class="winFlash hidden"></div>
+        <div id="cascadeText" class="cascadeText"></div>
+        <div id="multiplierRain" class="multiplierRain"></div>
+      </div>
+      <aside class="zeusStage">
+        <div class="moon"></div>
+        <div class="zeusFigure">
+          <div class="zeusCrown">♛</div>
+          <div class="zeusHead">◉</div>
+          <div class="zeusBody">⚡</div>
+          <div class="zeusBolt">ϟ</div>
+        </div>
+        <div class="zeusName">ZEUS</div>
+        <div id="multiplierBadge" class="multiplierBadge hidden">x0</div>
+      </aside>
+    </div>
+
+    <div class="featureBar">
+      <div class="featureText"><span id="featureText">8+ sembol eşleşmesi kazanır</span></div>
+      <div class="balanceBlock"><small>BAKİYE</small><b id="balance">1000</b></div>
+    </div>
+
+    <div class="bottomControls">
       <div class="betControl">
         <button id="betDown">−</button>
         <div><small>BAHİS</small><b id="bet">10</b></div>
         <button id="betUp">+</button>
       </div>
-      <button id="spin" class="spinBtn"><span>⚡</span> ÇEVİR</button>
+      <button id="spin" class="spinBtn"><span>↻</span> ÇEVİR</button>
       <button id="auto" class="autoBtn">AUTO</button>
     </div>
 
     <div class="payline">
-      <span>⚡ 8-10 = 2x</span>
-      <span>◆ 11-13 = 4x</span>
-      <span>♦ 14-17 = 8x</span>
-      <span>👑 18+ = 15x</span>
-      <span>✦ SCATTER 4+ = BONUS</span>
+      <span>8+ sembol kazanır</span>
+      <span>✦ 4+ SCATTER = 15 FREE SPIN</span>
+      <span>⚡ Çarpanlar tumble kazancını artırır</span>
     </div>
   </section>
 </main>
-
-
 
 <div id="toast" class="toast"></div>
 <div id="bigWin" class="bigWin hidden"><div class="bigWinGlow"></div><div id="bigWinText">BIG WIN</div><small id="bigWinAmount">+0</small></div>

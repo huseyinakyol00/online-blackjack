@@ -7,7 +7,7 @@ const SYMBOLS=[
  {id:"crown",icon:"👑",weight:11,mult:1},
  {id:"ring",icon:"💍",weight:10,mult:1},
  {id:"chalice",icon:"🏆",weight:10,mult:1},
- {id:"scatter",icon:"✦",weight:5,mult:0,scatter:true},
+ {id:"scatter",icon:"✦",weight:3.5,mult:0,scatter:true},
  {id:"wild",icon:"⚡",weight:3,mult:0,wild:true}
 ];
 const COLS=6,ROWS=5;
@@ -49,9 +49,9 @@ function wildBonus(){
  return grid.reduce((a,s)=>a+(s?.wild?1:0),0);
 }
 const MULTIPLIER_WEIGHTS=[
- {value:2,weight:45},{value:5,weight:25},{value:10,weight:15},{value:25,weight:7},
- {value:50,weight:4},{value:100,weight:2},{value:500,weight:1},{value:1000,weight:0.5},
- {value:2500,weight:0.3},{value:5000,weight:0.2}
+ {value:2,weight:45},{value:5,weight:27},{value:10,weight:15},{value:25,weight:7},
+ {value:50,weight:3.5},{value:100,weight:1.5},{value:500,weight:0.8},
+ {value:1000,weight:0.15},{value:2500,weight:0.04},{value:5000,weight:0.01}
 ];
 function pickMultiplier(){let r=Math.random()*100;for(const m of MULTIPLIER_WEIGHTS){r-=m.weight;if(r<=0)return m.value}return 2}
 function multiplierCells(){const a=[];grid.forEach((s,i)=>{if(s?.wild)a.push({i,value:pickMultiplier()})});return a}

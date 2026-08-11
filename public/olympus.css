@@ -125,3 +125,160 @@ body{overflow-x:hidden}
 .multOdds{font-size:6px;line-height:1.45;text-align:center;color:#666;margin:5px -2px 8px;padding-top:5px;border-top:1px solid #ffffff0a}
 
 .multCaptureHint{font-size:6px;line-height:1.35;text-align:center;color:#8e815f;margin:5px 0 7px}
+
+
+/* ===== OLYMPUS V7 VISUAL REDESIGN ===== */
+:root{
+  --violet:#251133;
+  --violet2:#4c205d;
+  --gold:#d8a83d;
+  --gold2:#f4d57b;
+  --ink:#100812;
+  --purpleGlow:#8c3aa8;
+}
+body{
+  background:
+    radial-gradient(ellipse at 50% 30%,#542260 0%,#24102e 34%,#09070c 78%);
+  color:#fff;
+  overflow-x:hidden;
+}
+.gameBackdrop{
+  position:fixed;inset:0;pointer-events:none;overflow:hidden;
+  background:
+    radial-gradient(circle at 20% 12%,rgba(255,221,130,.11),transparent 20%),
+    radial-gradient(circle at 82% 15%,rgba(113,57,164,.25),transparent 27%),
+    linear-gradient(180deg,#140a1c 0%,#08070b 100%);
+}
+.cloud{
+  position:absolute;width:480px;height:160px;border-radius:50%;
+  background:rgba(180,115,211,.08);filter:blur(28px);
+}
+.cloud1{left:-120px;top:110px}.cloud2{right:-150px;top:240px}
+.topbar{
+  height:58px;background:linear-gradient(180deg,#160c1d,#09070c);
+  border-bottom:1px solid rgba(224,178,72,.45);
+  box-shadow:0 4px 30px #000;position:relative;z-index:5;
+}
+.brand{font-family:Georgia,serif;letter-spacing:2px;color:#f6d476;text-shadow:0 0 12px #9d6329}
+.brand b{color:#fff4bd}
+.olympusGame{
+  position:relative;z-index:2;display:grid;grid-template-columns:150px minmax(720px,1120px);
+  gap:18px;justify-content:center;padding:18px 22px 28px;
+}
+.leftRail{padding-top:120px}
+.railCard{
+  background:linear-gradient(180deg,rgba(21,12,27,.95),rgba(8,6,10,.94));
+  border:1px solid rgba(221,174,66,.48);border-radius:12px;padding:15px 12px;
+  box-shadow:0 12px 40px #000, inset 0 0 20px rgba(168,89,191,.08);
+}
+.railCaption{font-size:10px;letter-spacing:1.5px;color:#cdbb91;text-align:center}
+.railMultiplier{
+  font:700 30px Georgia,serif;text-align:center;color:#ffe28a;
+  text-shadow:0 0 18px #e7a83c;margin:7px 0;
+}
+.railMode{font-size:9px;text-align:center;color:#d8b85c}
+.railHint{font-size:8px;line-height:1.4;text-align:center;color:#8e8193;margin:8px 0}
+.machine{min-width:0}
+.titlePlate{text-align:center;margin:0 auto 8px}
+.gameTitle{
+  font:700 25px Georgia,serif;letter-spacing:4px;color:#f8d67c;
+  text-shadow:0 2px 0 #4c2c08,0 0 16px #c57a2e;
+}
+.gameTag{font-size:9px;letter-spacing:2px;color:#b99abf;margin-top:3px}
+.winBanner{
+  width:min(560px,80%);margin:0 auto 8px;text-align:center;
+  background:linear-gradient(180deg,#6e3518,#2c130f);
+  border:2px solid #d9a64a;border-radius:16px;padding:5px 20px;
+  box-shadow:0 0 18px #000,0 0 18px rgba(224,159,47,.22) inset;
+}
+.winBanner span{display:block;font-size:9px;color:#e7c67b;letter-spacing:1.5px}
+.winBanner strong{display:block;font:700 25px Georgia,serif;color:#fff3bb}
+.reelStage{
+  display:grid;grid-template-columns:minmax(0,1fr) 170px;align-items:stretch;
+  min-height:590px;
+}
+.reelFrame{
+  position:relative;padding:12px 10px;border:4px solid #b77b28;border-radius:10px 0 0 10px;
+  background:
+    linear-gradient(90deg,rgba(25,9,33,.98),rgba(62,23,72,.98),rgba(28,10,36,.98));
+  box-shadow:0 0 0 2px #4e2a11,0 14px 45px #000,inset 0 0 35px rgba(215,141,54,.12);
+}
+.grid{
+  width:100%;height:100%;min-height:560px;display:grid;grid-template-columns:repeat(6,1fr);
+  grid-template-rows:repeat(5,1fr);gap:3px;background:#1b0b25;
+  border:1px solid rgba(242,196,93,.35);padding:5px;
+}
+.cell{
+  min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(34px,4.2vw,66px)!important;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(255,255,255,.08),transparent 48%),
+    linear-gradient(145deg,#53215d,#2b1237);
+  border-left:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(0,0,0,.55);
+  border-radius:5px;box-shadow:inset 0 0 12px rgba(0,0,0,.3);
+}
+.cell.win{
+  box-shadow:0 0 0 2px #ffd76a,0 0 25px #ffbf45,inset 0 0 20px #fff2a0;
+  animation:olympusWin .42s ease-in-out infinite alternate;
+}
+@keyframes olympusWin{from{filter:brightness(1)}to{filter:brightness(1.7)}}
+.zeusStage{
+  position:relative;overflow:hidden;border:4px solid #b77b28;border-left:0;border-radius:0 10px 10px 0;
+  background:
+    radial-gradient(circle at 50% 23%,rgba(174,104,220,.45),transparent 25%),
+    linear-gradient(180deg,#29113b,#0c0711);
+  box-shadow:0 14px 45px #000,inset 0 0 35px rgba(228,173,67,.15);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:22px;
+}
+.moon{
+  position:absolute;right:22px;top:24px;width:54px;height:54px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff8cf,#cbb5ff 52%,#6c4b9e);
+  box-shadow:0 0 30px #d3bfff;
+}
+.zeusFigure{
+  position:relative;width:120px;height:360px;display:flex;align-items:center;justify-content:center;
+  color:#f7e7c0;text-shadow:0 0 15px #ffd56a;filter:drop-shadow(0 0 18px rgba(225,169,65,.35));
+}
+.zeusCrown{position:absolute;top:6px;font-size:44px;color:#e4b44c}
+.zeusHead{position:absolute;top:55px;font-size:62px;color:#f1d5ae}
+.zeusBody{position:absolute;top:118px;font-size:120px;color:#fff}
+.zeusBolt{position:absolute;right:3px;top:155px;font-size:92px;color:#ffd34e;transform:rotate(-12deg)}
+.zeusName{font:700 18px Georgia,serif;color:#f2d17a;letter-spacing:3px}
+.multiplierBadge{margin-top:8px;color:#fff0a2;font-weight:800}
+.featureBar{
+  display:flex;justify-content:space-between;align-items:center;margin-top:8px;
+  padding:10px 14px;background:rgba(10,7,12,.9);border:1px solid rgba(211,165,62,.35);
+  border-radius:8px;color:#d8c7a4;font-size:11px;
+}
+.featureText{color:#d9c6a0}.balanceBlock{text-align:right}.balanceBlock small{display:block;color:#a79a8b;font-size:8px}.balanceBlock b{color:#ffe08a;font-size:17px}
+.bottomControls{
+  display:flex;justify-content:center;align-items:center;gap:16px;margin-top:12px;
+}
+.betControl{
+  display:flex;align-items:center;background:#110c13;border:1px solid #9d6c29;border-radius:9px;overflow:hidden;
+}
+.betControl button{width:38px;height:46px;background:#211521;color:#f1c964;border:0;font-size:24px;cursor:pointer}
+.betControl div{min-width:72px;text-align:center}.betControl small{display:block;color:#a99a8e;font-size:8px}.betControl b{color:#fff1ba;font-size:18px}
+.spinBtn{
+  width:170px;height:58px;border-radius:50%;border:3px solid #e2b94e;
+  background:radial-gradient(circle at 45% 30%,#fff0a3,#d28a1f 45%,#71360d 100%);
+  color:#2b1607;font-weight:900;font-size:17px;box-shadow:0 0 20px rgba(238,181,67,.35),inset 0 -7px 10px #71330b;
+}
+.spinBtn:hover{filter:brightness(1.12);transform:scale(1.03)}
+.autoBtn{height:46px;padding:0 18px;border-radius:8px;background:#1a101d;border:1px solid #8d6530;color:#dfc27b;font-weight:700}
+.payline{
+  display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:10px;color:#8d7b8f;font-size:9px;
+}
+.multOdds{display:none!important}
+@media(max-width:1000px){
+ .olympusGame{grid-template-columns:1fr;padding:10px}
+ .leftRail{padding-top:0;order:2}.railCard{max-width:520px;margin:auto}
+ .machine{order:1}.reelStage{grid-template-columns:1fr 125px}.zeusFigure{transform:scale(.8)}
+}
+@media(max-width:700px){
+ .topbar .back{display:none}.brand{font-size:13px}.topright{font-size:8px}
+ .reelStage{grid-template-columns:1fr}.zeusStage{display:none}
+ .grid{min-height:430px}.featureBar{font-size:9px}.payline{gap:10px}
+ .spinBtn{width:145px}.betControl{transform:scale(.9)}
+}
