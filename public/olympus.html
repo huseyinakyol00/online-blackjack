@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="olympus.css">
 </head>
 <body>
+<canvas id="fxCanvas" class="fxCanvas"></canvas>
+<div class="stormVignette"></div>
+<div class="topLightning" id="topLightning"></div>
 <header class="topbar">
   <a href="/" class="back">← Oyunlar</a>
   <div class="brand"><span>⚡</span> OLYMPUS <b>STORM</b></div>
@@ -33,6 +36,7 @@
       <div id="grid" class="grid"></div>
       <div id="winFlash" class="winFlash hidden"></div>
       <div id="cascadeText" class="cascadeText"></div>
+      <div id="multiplierRain" class="multiplierRain"></div>
     </div>
 
     <div class="controls">
@@ -66,6 +70,7 @@
 </div>
 
 <div id="toast" class="toast"></div>
+<div id="bigWin" class="bigWin hidden"><div class="bigWinGlow"></div><div id="bigWinText">BIG WIN</div><small id="bigWinAmount">+0</small></div>
 <script src="olympus.js"></script>
 </body>
 </html>
