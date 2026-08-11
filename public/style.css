@@ -523,3 +523,68 @@ html,body,#game{width:100vw;min-width:0}
 .felt{left:200px;width:calc(100vw - 215px)}
 .systemLog{left:200px;width:calc(100vw - 215px)}
 }
+
+/* ===== HARD FULLSCREEN TABLE FIX =====
+   The felt is viewport-anchored so it cannot inherit a half-width
+   container from the game layout. */
+.casinoLayout{
+  position:relative!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+.tableArea{
+  position:static!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+}
+.tableWrap{
+  position:static!important;
+  width:100%!important;
+  height:100%!important;
+}
+.felt{
+  position:fixed!important;
+  left:210px!important;
+  right:14px!important;
+  top:68px!important;
+  width:auto!important;
+  height:calc(100vh - 245px)!important;
+  transform:none!important;
+  z-index:5;
+}
+.systemLog{
+  position:fixed!important;
+  left:210px!important;
+  right:14px!important;
+  width:auto!important;
+  bottom:164px!important;
+  height:48px!important;
+  z-index:95;
+}
+.controlPanel{
+  position:fixed!important;
+  left:8px!important;
+  top:70px!important;
+  bottom:174px!important;
+  width:190px!important;
+  height:auto!important;
+  z-index:100;
+}
+.bottomBar{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100%!important;
+  height:164px!important;
+  z-index:200;
+}
+@media(max-width:900px){
+  .felt{left:195px!important;right:8px!important}
+  .systemLog{left:195px!important;right:8px!important}
+  .controlPanel{width:175px!important}
+}
