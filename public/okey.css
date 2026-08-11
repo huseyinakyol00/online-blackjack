@@ -214,3 +214,21 @@ main{height:calc(100vh - 58px);display:grid;grid-template-columns:220px 1fr;gap:
  .actions button{padding:8px 8px;font-size:9px}
  .meldArea{left:9%;right:9%}
 }
+
+
+/* Yönlü atılan taşlar: 1→2, 2→3, 3→4, 4→1 */
+.discardPiles{position:absolute;inset:0;z-index:32;pointer-events:none}
+.discardLane{position:absolute;width:112px;min-height:108px;display:flex;flex-direction:column;align-items:center;gap:5px;pointer-events:auto}
+.lane12{left:14%;top:17%}.lane23{right:14%;top:17%}
+.lane34{right:14%;bottom:17%}.lane41{left:14%;bottom:17%}
+.discardArrow{padding:5px 10px;border-radius:999px;background:#07150ee8;border:1px solid #d5ad4a55;color:#e8c45d;font-size:10px;font-weight:900;letter-spacing:.5px;box-shadow:0 6px 15px #0008}
+.discardStack{position:relative;width:76px;height:76px;display:flex;justify-content:center;align-items:flex-start}
+.discardStack .discardCard{position:absolute;width:43px;height:59px;border-radius:5px;background:linear-gradient(145deg,#fffef5 0,#eee8d6 62%,#cfc6b0 100%);border:2px solid #fffdf2;box-shadow:inset -3px -3px 5px #8c806755,0 5px 10px #0009;display:grid;place-items:center;font-weight:1000;font-size:18px;transform-origin:50% 90%}
+.discardStack .discardCard:before{content:"";position:absolute;inset:3px;border:1px solid #b7aa8c55;border-radius:3px}
+.discardStack .discardCard.c0{color:#159447}.discardStack .discardCard.c1{color:#e33a42}.discardStack .discardCard.c2{color:#1e63d1}.discardStack .discardCard.c3{color:#151515}.discardStack .discardCard.false{color:#8a5ac2}
+.discardStack .discardCard.last{animation:discardStackIn .42s cubic-bezier(.2,.9,.2,1)}
+@keyframes discardStackIn{from{opacity:0;transform:translateY(-28px) rotate(10deg) scale(.7)}to{opacity:1}}
+.discardCount{position:absolute;right:-2px;bottom:-4px;padding:3px 6px;border-radius:999px;background:#06120de8;border:1px solid #ffffff22;color:#d8ded9;font-size:9px;font-weight:900}
+.discardLane.canTake .discardArrow{border-color:#dcb94e;box-shadow:0 0 16px #e7c05255}
+@media(max-width:1250px){.discardLane{width:94px;transform:scale(.9)}.lane12,.lane41{left:12%}.lane23,.lane34{right:12%}}
+@media(max-height:850px){.lane12,.lane23{top:14%}.lane34,.lane41{bottom:14%}}

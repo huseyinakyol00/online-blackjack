@@ -99,6 +99,26 @@ function opponentRack(count){
  for(let i=0;i<Math.min(count,21);i++)out+='<span class="backTile"></span>';
  return out+"</div>";
 }
+function discardCardHTML(t,index,isLast){
+ const cls=tileClass(t);
+ return `<div class="discardCard ${cls}${isLast?" last":""}" style="z-index:${index+1};transform:translate(${index*1.6}px,${index*1.2}px) rotate(${(index%3-1)*1.4}deg)">${tileText(t)}</div>`;
+}
+function renderDiscardPiles(){
+ const piles=state.discardPiles||[[],[],[],[]];
+ const myIndex=Math.max(0,state.players.findIndex(p=>p.id===myId));
+ const canTakeIndex=(myIndex+3)%4;
+ for(let i=0;i<4;i++){
+   const box=$(`discard${i}`);
+   if(!box)continue;
+   const pile=piles[i]||[];
+   const visible=pile.slice(-7);
+   box.innerHTML=visible.length
+     ? visible.map((t,j)=>discardCardHTML(t,j,j===visible.length-1)).join("")+`<span class="discardCount">${pile.length}</span>`
+     : "";
+   const lane=box.closest(".discardLane");
+   lane?.classList.toggle("canTake",i===canTakeIndex && state.currentPlayerId===myId && state.phase==="playing");
+ }
+}
 function renderSeats(){
  $("seats").innerHTML=state.players.map((p,i)=>{
    const active=p.id===state.currentPlayerId;
@@ -140,7 +160,7 @@ function render(old,s){
  $("reset").classList.toggle("hidden",s.hostId!==myId);
  $("indicatorTile").innerHTML=s.indicator?tileHTML(s.indicator,false):"";
  $("jokerText").textContent=s.joker?`Okey: ${s.joker.num}`:"Okey: -";
- $("discardTile").innerHTML=s.discard?tileHTML(s.discard,false):"—";
+ renderDiscardPiles();
  $("wallCount").textContent=s.wallCount;
  renderSeats();renderMelds();renderRack();
 

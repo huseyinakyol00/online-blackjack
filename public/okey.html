@@ -59,14 +59,29 @@
 
       <div class="centerPile">
         <div class="pileBox">
-          <div class="pileLabel">ATILAN</div>
-          <div id="discardTile" class="discardTile">—</div>
-        </div>
-        <div class="pileBox">
           <div class="wallVisual">
             <div class="wallTiles"><i></i><i></i><i></i><i></i><i></i></div>
             <span>ORTA <b id="wallCount">0</b></span>
           </div>
+        </div>
+      </div>
+
+      <div id="discardPiles" class="discardPiles">
+        <div class="discardLane lane12" data-lane="0">
+          <div class="discardArrow">1 → 2</div>
+          <div class="discardStack" id="discard0"></div>
+        </div>
+        <div class="discardLane lane23" data-lane="1">
+          <div class="discardArrow">2 → 3</div>
+          <div class="discardStack" id="discard1"></div>
+        </div>
+        <div class="discardLane lane34" data-lane="2">
+          <div class="discardArrow">3 → 4</div>
+          <div class="discardStack" id="discard2"></div>
+        </div>
+        <div class="discardLane lane41" data-lane="3">
+          <div class="discardArrow">4 → 1</div>
+          <div class="discardStack" id="discard3"></div>
         </div>
       </div>
 

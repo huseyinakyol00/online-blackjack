@@ -26,3 +26,5 @@ npm start
 ```
 
 Render gibi servislerde start komutu `npm start` olmalıdır.
+
+- Atılan taşlar artık yönlüdür: 1→2, 2→3, 3→4, 4→1; her kenarda ayrı bir deste olarak üst üste birikir.

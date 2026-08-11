@@ -231,6 +231,7 @@ function okeyPublic(room){
     message:room.message,joker:room.joker,indicator:room.indicator,
     wallCount:room.wall.length,
     discard:room.discard.length?room.discard[room.discard.length-1]:null,
+    discardPiles:(room.discardPiles||[[],[],[],[]]).map(p=>p.slice(-12)),
     currentPlayerId:room.players[room.turn]?.id||null,
     melds:publicMelds(room),
     players:room.players.map(p=>({
@@ -260,7 +261,7 @@ function okeyStart(room){
   const indIndex=bag.findIndex(t=>!t.falseJoker);
   room.indicator=bag.splice(indIndex,1)[0];
   room.joker=okeyJoker(room.indicator);
-  room.wall=bag;room.discard=[];room.melds=[];room.phase="playing";
+  room.wall=bag;room.discard=[];room.discardPiles=[[],[],[],[]];room.melds=[];room.phase="playing";
   room.turn=0;room.winner=null;
   room.players.forEach(p=>{
     p.hand=[];p.rackRows=[[],[]];p.opened=false;p.openValue=0;p.pairs=0;p.score=0;
@@ -291,7 +292,7 @@ function requireTurn(room,socket){
   return p;
 }
 function resetOkeyRoom(room){
-  room.phase="waiting";room.turn=-1;room.wall=[];room.discard=[];room.indicator=null;room.joker=null;
+  room.phase="waiting";room.turn=-1;room.wall=[];room.discard=[];room.discardPiles=[[],[],[],[]];room.indicator=null;room.joker=null;
   room.melds=[];room.winner=null;room.message="Masa sıfırlandı. 4 oyuncu bekleniyor.";
   room.players.forEach(p=>{p.hand=[];p.opened=false;p.openValue=0;p.pairs=0;p.score=p.score||0});
 }
@@ -304,7 +305,7 @@ io.on("connection",socket=>{
       if(!roomCode)return socket.emit("okeyError","Oda kodu gerekli.");
       const key="OKEY_"+roomCode;
       if(!okeyRooms[key])okeyRooms[key]={
-        code:roomCode,players:[],phase:"waiting",hostId:null,wall:[],discard:[],
+        code:roomCode,players:[],phase:"waiting",hostId:null,wall:[],discard:[],discardPiles:[[],[],[],[]],
         turn:-1,message:"4 oyuncu bekleniyor.",indicator:null,joker:null,melds:[],winner:null
       };
       const room=okeyRooms[key];
@@ -356,10 +357,16 @@ io.on("connection",socket=>{
       const room=okeyRoomFor(socket.id);if(!room||room.phase!=="playing")return;
       const p=requireTurn(room,socket);if(!p)return;
       if(p.hand.length!==21)return socket.emit("okeyError","Bu tur zaten bir taşın var.");
-      if(!room.discard.length)return socket.emit("okeyError","Atılan taş yok.");
-      const t=room.discard.pop();
+      const toIndex=room.turn;
+      const fromIndex=(toIndex+3)%4;
+      const pile=room.discardPiles?.[fromIndex]||[];
+      if(!pile.length)return socket.emit("okeyError","Sana atılmış bir taş yok.");
+      const t=pile[pile.length-1];
+      const globalIndex=room.discard.map(x=>x.id).lastIndexOf(t.id);
+      if(globalIndex>=0)room.discard.splice(globalIndex,1);
+      pile.pop();
       p.hand.push(t);p.rackRows[1].push(t.id);
-      room.message=`${p.name} atılan taşı aldı.`;
+      room.message=`${p.name}, ${room.players[fromIndex].name} oyuncusunun attığı taşı aldı.`;
       okeyBroadcast(room);
     });
 
@@ -427,6 +434,9 @@ io.on("connection",socket=>{
       p.hand.splice(idx,1);
       p.rackRows=p.rackRows.map(row=>row.filter(id=>Number(id)!==t.id));
       room.discard.push(t);
+      const fromIndex=room.turn;
+      if(!room.discardPiles)room.discardPiles=[[],[],[],[]];
+      room.discardPiles[fromIndex].push(t);
       if(p.hand.length===0){okeyFinish(room,p,okeyIsWild(t,room.joker)?"okey":"normal");return}
       room.turn=(room.turn+1)%4;
       room.message=`${p.name} taş attı. Sıra ${room.players[room.turn].name}.`;
