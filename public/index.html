@@ -3,98 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Online Blackjack</title>
-<link rel="stylesheet" href="style.css">
+<title>Online Oyunlar</title>
+<link rel="stylesheet" href="lobby.css">
 </head>
 <body>
-<div id="joinScreen" class="joinScreen">
-  <div class="joinCard">
-    <div class="joinLogo">♠ BLACKJACK ♥</div>
-    <div class="joinSub">5 kişiye kadar online masa</div>
-    <input id="name" placeholder="Adın" maxlength="16">
-    <input id="room" placeholder="Oda kodu" maxlength="12">
-    <button id="join" class="goldBtn bigBtn">MASAYA GİR</button>
-    <div class="joinSmall">Sadece sanal çip kullanılır.</div>
-  </div>
-</div>
+<div class="lobby">
+  <header class="lobbyTop">
+    <div class="logo">♠ <span>ONLINE OYUNLAR</span> ♥</div>
+    <div class="sub">Arkadaşlarınla aynı odada oyna</div>
+  </header>
 
-<div id="game" class="hidden">
-<div id="roundBanner" class="roundBanner hidden">✦ YENİ EL BAŞLADI! ✦</div>
-<header class="topbar">
-  <div class="brand">♠ <b>BLACKJACK</b> ♥ <span id="roomLabel">Oda: -</span></div>
-  <div class="headerRight"><div id="message"></div><button id="soundToggle" class="soundBtn">🔊 Ses Açık</button></div>
-</header>
-
-<div class="casinoLayout">
-  <aside class="controlPanel">
-    <div class="sideTitle">OYUN KONTROLLERİ</div>
-    <button id="start" class="sideBtn green">▶ Oyunu Başlat</button>
-    <button id="next" class="sideBtn gold hidden">↻ Yeni El</button>
-    <div id="playBox" class="playButtons hidden">
-      <div class="yourTurnLabel">SENİN SIRAN</div>
-      <button id="hit" class="actionBtn hit">🃏 TAŞ ÇEK</button>
-      <button id="stand" class="actionBtn stand">✋ KAL</button>
-      <button id="double" class="actionBtn double">× 2 DOUBLE</button>
+  <main>
+    <div class="hero">
+      <div class="eyebrow">ÇOK OYUNCULU OYUNLAR</div>
+      <h1>Hangi oyunu oynayacaksın?</h1>
+      <p>Bir oyun seç, adını ve oda kodunu gir, arkadaşlarınla masaya otur.</p>
     </div>
-    <div id="hostBox" class="hostBox hidden">
-      <div id="hostLabel">👑 ODA SAHİBİ</div>
-      <button id="resetLobby" class="sideBtn red">↻ Lobiyi Sıfırla</button>
-    </div>
-    <div class="sideDivider"></div>
-    <div class="sideTitle">ODA SAHİBİ</div>
-    <div id="hostName" class="hostName">👑 —</div>
-    <div class="sideDivider"></div>
-    <div class="sideTitle">OYUNCULAR <span id="playerCount">(0/5)</span></div>
-    <div id="playersList"></div>
-  </aside>
 
-  <main class="tableArea">
-    <div class="tableWrap">
-      <div class="felt">
-        <div class="feltPrint">BLACKJACK PAYS 3 TO 2<span>Dealer must stand on 17 and must draw to 16</span><span>INSURANCE PAYS 2 TO 1</span></div>
-
-        <div class="dealerSpot">
-          <div class="dealerLabel">KRUPİYE</div>
-          <div id="dealerCards" class="cards"></div>
-          <div id="dealerValue" class="dealerValue">Değer: 0</div>
+    <section class="games">
+      <article class="gameCard blackjack">
+        <div class="gameIcon">♠</div>
+        <div class="gameInfo">
+          <span class="tag">5 KİŞİ</span>
+          <h2>Blackjack</h2>
+          <p>Casino masasına geç. Bahsini koy, kartlarını al ve krupiyeyi yen.</p>
+          <button data-game="blackjack">BLACKJACK OYNA →</button>
         </div>
+      </article>
 
-        <div class="deckVisual"><div class="deckBack"></div><div class="deckBack second"></div></div>
-        <div id="players" class="tablePlayers"></div>
-        <div id="tableActions" class="tableActions hidden">
-          <button id="tableHit" class="actionBtn hit">🃏 TAŞ ÇEK</button>
-          <button id="tableStand" class="actionBtn stand">✋ KAL</button>
-          <button id="tableDouble" class="actionBtn double">× 2 DOUBLE</button>
+      <article class="gameCard okey">
+        <div class="gameIcon">🀄</div>
+        <div class="gameInfo">
+          <span class="tag">4 KİŞİ</span>
+          <h2>Okey</h2>
+          <p>Taşlarını diz, seri ve gruplarını tamamla. Masadaki ilk biten sen ol.</p>
+          <button data-game="okey">OKEY OYNA →</button>
         </div>
-        <div id="winOverlay" class="winOverlay hidden"></div><div id="effects"></div>
-      </div>
-    </div>
-
-    <div class="systemLog">
-      <div id="message">Sistem: Odaya hoş geldiniz.</div>
-      <div class="rulesMini"><b>TAŞ ÇEK:</b> Kart almak için tıklayın &nbsp; • &nbsp; <b>KAL:</b> Mevcut kartlarla devam edin</div>
-    </div>
+      </article>
+    </section>
   </main>
-</div>
 
-<div class="bottomBar">
-  <div id="chipTray" class="chipTray">
-    <button class="chip chip10" data-chip="10">10</button>
-    <button class="chip chip25" data-chip="25">25</button>
-    <button class="chip chip50" data-chip="50">50</button>
-    <button class="chip chip100" data-chip="100">100</button>
-    <button class="chip chip250" data-chip="250">250</button>
-    <button class="chip chip500" data-chip="500">500</button>
+  <div id="joinModal" class="modal hidden">
+    <div class="joinModalCard">
+      <button id="closeModal" class="close">×</button>
+      <div id="selectedIcon" class="selectedIcon">♠</div>
+      <div id="selectedTitle" class="selectedTitle">BLACKJACK</div>
+      <p id="selectedDesc">5 kişiye kadar online masa</p>
+      <input id="playerName" maxlength="16" placeholder="Oyuncu adın">
+      <input id="roomCode" maxlength="12" placeholder="Oda kodu">
+      <button id="enterGame" class="enter">MASAYA GİR</button>
+      <div class="hint">Arkadaşların da aynı oyun ve oda kodunu kullanmalı.</div>
+    </div>
   </div>
-  <input id="bet" type="hidden" value="10">
-<div class="totalBet"><span>Toplam Bahis</span><strong>🪙 <b id="betTotal">10</b></strong></div>
-  <div class="wallet"><span>BAKİYEN</span><strong>🪙 <b id="myBalance">1000</b></strong></div>
-  <button id="clearBet" class="clearBtn">🗑 Bahisleri Temizle</button>
-  <div id="myResult" class="resultBox">—</div>
 </div>
-
-<div id="error" class="toast hidden"></div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="game.js"></script>
+<script src="lobby.js"></script>
 </body>
 </html>
