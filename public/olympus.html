@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Olympus Storm</title>
+<link rel="stylesheet" href="olympus.css">
+</head>
+<body>
+<header class="topbar">
+  <a href="/" class="back">← Oyunlar</a>
+  <div class="brand"><span>⚡</span> OLYMPUS <b>STORM</b></div>
+  <div class="topright"><span id="modeText">DEMO</span><button id="soundBtn">🔊 Ses</button></div>
+</header>
+
+<main class="slotShell">
+  <section class="godPanel">
+    <div class="godHalo"></div>
+    <div class="godSymbol">⚡</div>
+    <div class="godName">THUNDER LORD</div>
+    <div class="godSub">ÇARPANLARIN EFENDİSİ</div>
+    <div id="multiplierBadge" class="multiplierBadge hidden">x0</div>
+  </section>
+
+  <section class="slotArea">
+    <div class="statusRow">
+      <div><span class="label">BAKİYE</span><strong id="balance">1000</strong></div>
+      <div class="winBox"><span class="label">KAZANÇ</span><strong id="win">0</strong></div>
+      <div class="spinInfo"><span id="featureText">8+ sembol eşleşmesi kazanır</span></div>
+    </div>
+
+    <div class="gridWrap">
+      <div id="grid" class="grid"></div>
+      <div id="winFlash" class="winFlash hidden"></div>
+      <div id="cascadeText" class="cascadeText"></div>
+    </div>
+
+    <div class="controls">
+      <div class="betControl">
+        <button id="betDown">−</button>
+        <div><small>BAHİS</small><b id="bet">10</b></div>
+        <button id="betUp">+</button>
+      </div>
+      <button id="spin" class="spinBtn"><span>⚡</span> ÇEVİR</button>
+      <button id="auto" class="autoBtn">AUTO</button>
+    </div>
+
+    <div class="payline">
+      <span>⚡ 8-10 = 2x</span>
+      <span>◆ 11-13 = 4x</span>
+      <span>♦ 14-17 = 8x</span>
+      <span>👑 18+ = 15x</span>
+      <span>✦ SCATTER 4+ = BONUS</span>
+    </div>
+  </section>
+</main>
+
+<div id="bonusModal" class="bonusModal hidden">
+  <div class="bonusCard">
+    <div class="bonusIcon">⚡</div>
+    <h2>FIRTINA BONUSU</h2>
+    <p>15 ücretsiz çevirme kazandın.</p>
+    <div class="freeCount"><b id="freeCount">15</b> FREE SPIN</div>
+    <button id="bonusStart">BONUSU BAŞLAT</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="olympus.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+*{box-sizing:border-box}
+:root{--gold:#e8bc55;--gold2:#fff0a0;--bg:#030405;--panel:#0a0d0d;--purple:#5e3a88}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 50% 20%,#17251f 0,#070a09 42%,#020303 78%);color:#fff}
+button{font:inherit}
+.topbar{height:64px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;background:#040505ed;border-bottom:1px solid #8d6a2b;position:sticky;top:0;z-index:20}
+.back{color:#b9c0bb;text-decoration:none;font-size:13px}.back:hover{color:#fff}
+.brand{font-family:Georgia,serif;font-size:24px;font-weight:900;letter-spacing:2px;color:var(--gold)}.brand b{color:#fff}
+.topright{display:flex;gap:10px;align-items:center;color:#777;font-size:11px}
+.topright button{border:1px solid #4a4e4c;background:#111615;color:#ddd;border-radius:8px;padding:8px 12px;cursor:pointer}
+.slotShell{max-width:1280px;margin:auto;min-height:calc(100vh - 64px);padding:28px 24px 36px;display:grid;grid-template-columns:180px 1fr;gap:18px}
+.godPanel{position:relative;min-height:640px;border-radius:22px;border:1px solid #5c4725;background:linear-gradient(180deg,#13100b,#090b0b);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;padding-top:65px;box-shadow:inset 0 0 50px #000,0 25px 80px #0008}
+.godHalo{position:absolute;width:190px;height:190px;top:40px;border-radius:50%;background:radial-gradient(circle,#e7c55a44,transparent 65%);filter:blur(3px)}
+.godSymbol{position:relative;font-size:110px;line-height:1;text-shadow:0 0 30px #e6bd55aa,0 0 70px #9b6b1d66;animation:float 3s ease-in-out infinite}
+.godName{position:relative;margin-top:15px;font-family:Georgia,serif;color:var(--gold2);font-weight:900;font-size:14px;letter-spacing:2px;text-align:center}
+.godSub{position:relative;color:#756b55;font-size:8px;letter-spacing:2px;margin-top:5px;text-align:center}
+.multiplierBadge{position:relative;margin-top:26px;border:1px solid #c69c3c;background:#18130a;color:#ffe899;padding:12px 22px;border-radius:10px;font-weight:1000;font-size:22px;box-shadow:0 0 25px #d1a64255}.hidden{display:none!important}
+.slotArea{min-width:0}.statusRow{display:grid;grid-template-columns:170px 170px 1fr;gap:12px;margin-bottom:10px}.statusRow>div{background:#080b0a;border:1px solid #282d2a;border-radius:10px;padding:10px 14px}.label{display:block;color:#737b76;font-size:9px;letter-spacing:1.4px;margin-bottom:3px}.statusRow strong{font-size:20px;color:#f1ce69}.winBox strong{color:#8ee3a6}.spinInfo{display:flex;align-items:center;justify-content:flex-end;color:#777;font-size:11px}
+.gridWrap{position:relative;background:linear-gradient(145deg,#17120a,#080a09 30%,#15110a);border:2px solid #6e4e1e;border-radius:18px;padding:16px;box-shadow:inset 0 0 70px #000,0 25px 70px #0009;overflow:hidden}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:8px;aspect-ratio:1.25}
+.cell{position:relative;border-radius:9px;border:1px solid #2f342f;background:radial-gradient(circle at 35% 25%,#1a2620,#0a0f0d 70%);display:grid;place-items:center;font-size:36px;cursor:default;user-select:none;box-shadow:inset 0 2px 8px #ffffff09,0 5px 12px #0007;transition:.16s}
+.cell.wild{border-color:#c89d39;box-shadow:0 0 20px #d2a84455,inset 0 0 25px #d0a33c22}
+.cell.scatter{border-color:#704c9c;box-shadow:0 0 18px #825bb555,inset 0 0 18px #7a4ebc22}
+.cell.win{animation:pop .48s ease forwards;border-color:#ffe27b;background:radial-gradient(circle,#765c1b,#1b160a)}
+.cell.new{animation:drop .35s ease}
+.cell.mult{font-size:18px;color:#ffe99b;font-weight:1000;text-shadow:0 0 12px #ffcf4e}.cell.mult span{font-size:12px;display:block}
+.winFlash{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle,#ffe38a33,transparent 60%);pointer-events:none;animation:flash .55s}
+.cascadeText{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:38px;font-weight:1000;color:#ffe27b;text-shadow:0 4px 25px #000;pointer-events:none;z-index:5}
+.controls{display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 0}.betControl{display:flex;align-items:center;background:#080b0a;border:1px solid #343936;border-radius:10px;overflow:hidden}.betControl button{width:40px;height:52px;border:0;background:#111614;color:#e7c76b;font-size:25px;cursor:pointer}.betControl div{width:72px;text-align:center}.betControl small{display:block;color:#777;font-size:8px}.betControl b{font-size:20px;color:#fff}
+.spinBtn{height:58px;min-width:180px;border:1px solid #f1ce69;border-radius:12px;background:linear-gradient(180deg,#f1cb60,#ad7315);color:#171109;font-weight:1000;font-size:18px;cursor:pointer;box-shadow:0 8px 25px #d09a2a33}.spinBtn:hover{filter:brightness(1.08);transform:translateY(-1px)}.spinBtn:disabled{opacity:.45;cursor:not-allowed;transform:none}.autoBtn{height:52px;padding:0 18px;border:1px solid #464d48;background:#111614;color:#ddd;border-radius:9px;cursor:pointer}.autoBtn.active{border-color:#d7b24d;color:#f1cf6c}
+.payline{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;color:#727a75;font-size:9px}.payline span{border:1px solid #202522;background:#080b0a;border-radius:20px;padding:6px 9px}
+.bonusModal{position:fixed;inset:0;background:#000c;display:grid;place-items:center;z-index:50;backdrop-filter:blur(7px)}.bonusCard{width:380px;max-width:90vw;text-align:center;padding:34px;border-radius:20px;border:1px solid #a77b27;background:radial-gradient(circle at 50% 0,#4c3613,#090b0b 60%);box-shadow:0 30px 100px #000}.bonusIcon{font-size:65px;text-shadow:0 0 35px #f1c34d}.bonusCard h2{font-family:Georgia,serif;color:#f3cf67;margin:8px 0}.bonusCard p{color:#aaa}.freeCount{margin:20px 0;color:#999}.freeCount b{color:#fff0a1;font-size:40px}.bonusCard button{border:0;border-radius:9px;padding:13px 25px;background:linear-gradient(#f0ca61,#af7418);font-weight:1000;cursor:pointer}
+.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:#111615;border:1px solid #8f6c29;padding:11px 18px;border-radius:999px;color:#f0d47e;font-size:12px;z-index:70;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%)}
+@keyframes pop{0%{transform:scale(1);opacity:1}45%{transform:scale(1.18);filter:brightness(1.8)}100%{transform:scale(.3);opacity:0}}
+@keyframes drop{from{transform:translateY(-30px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes flash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media(max-width:900px){.slotShell{grid-template-columns:1fr}.godPanel{min-height:120px;padding:15px;flex-direction:row;gap:15px}.godHalo{top:-30px}.godSymbol{font-size:65px}.godName{margin:0}.godSub{display:none}.multiplierBadge{margin:0 0 0 auto}.statusRow{grid-template-columns:1fr 1fr}.spinInfo{grid-column:1/-1;justify-content:center}.cell{font-size:28px}}
+@media(max-width:600px){.topbar{padding:0 12px}.brand{font-size:17px}.slotShell{padding:12px}.gridWrap{padding:8px}.grid{gap:4px}.cell{font-size:23px}.controls{flex-wrap:wrap}.spinBtn{order:-1;width:100%}}
