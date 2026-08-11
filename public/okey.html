@@ -1,21 +1,101 @@
 <!DOCTYPE html>
-<html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Online Okey</title><link rel="stylesheet" href="okey.css"></head>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Online Okey</title>
+<link rel="stylesheet" href="okey.css">
+</head>
 <body>
-<div id="join" class="join"><div class="joinCard"><div class="logo">🀄 OKEY</div><p>4 kişilik online masa</p><input id="name" placeholder="Oyuncu adın" maxlength="16"><input id="room" placeholder="Oda kodu" maxlength="12"><button id="enter">MASAYA GİR</button><a href="/">← Oyunlara dön</a></div></div>
-<div id="game" class="hidden">
-<header><a href="/" class="back">← Oyunlar</a><div class="brand">🀄 OKEY <span>Oda: <b id="roomLabel">-</b></span></div><div id="topMessage"></div></header>
-<main>
-<aside class="side"><div class="title">OKEY MASASI</div><button id="start">▶ Oyunu Başlat</button><button id="reset" class="red hidden">↻ Masayı Sıfırla</button><div class="line"></div><div id="host"></div><div class="line"></div><div>OYUNCULAR <b id="count">0/4</b></div><div id="players"></div><div class="help"><b>Oyun:</b> Sıra sende olduğunda ortadan veya atılan taştan bir taş al, sonra elinden bir taş at.</div></aside>
-<section class="tableArea"><div class="table">
-  <div class="indicator"><small>GÖSTERGE</small><div id="indicatorTile"></div><span id="jokerText">Okey: -</span></div>
-  <div class="discard"><small>ATILAN</small><div id="discardTile" class="empty">—</div></div>
-  <div class="wall"><div>ORTA</div><b id="wallCount">0</b><small>TAŞ</small></div>
-  <div id="seats"></div>
-  <div id="turnNotice" class="turnNotice hidden">SIRA SENDE</div>
+<div id="join" class="join">
+  <div class="joinCard">
+    <div class="logo">🀄 OKEY</div>
+    <p>4 kişilik online masa</p>
+    <input id="name" placeholder="Oyuncu adın" maxlength="16">
+    <input id="room" placeholder="Oda kodu" maxlength="12">
+    <button id="enter">MASAYA GİR</button>
+    <a href="/">← Oyunlara dön</a>
+  </div>
 </div>
-<div class="handBar"><div class="handTitle"><span>ELİN</span><span id="handHint">Bir taş seç</span></div><div id="hand" class="hand"></div><div class="actions"><button id="draw">TAŞ ÇEK</button><button id="take" class="purple">ATILANI AL</button><button id="discard" class="gold">TAŞI AT</button></div></div>
-</section></main>
+
+<div id="game" class="hidden">
+<header>
+  <a href="/" class="back">← Oyunlar</a>
+  <div class="brand">🀄 OKEY <span>Oda: <b id="roomLabel">-</b></span></div>
+  <div class="headerRight">
+    <div id="topMessage"></div>
+    <button id="soundToggle" class="soundBtn">🔊 Ses Açık</button>
+  </div>
+</header>
+
+<main>
+  <aside class="side">
+    <div class="title">OKEY MASASI</div>
+    <button id="start">▶ Oyunu Başlat</button>
+    <button id="reset" class="red hidden">↻ Masayı Sıfırla</button>
+    <div class="line"></div>
+    <div id="host"></div>
+    <div class="line"></div>
+    <div>OYUNCULAR <b id="count">0/4</b></div>
+    <div id="players"></div>
+    <div class="help">
+      <b>Nasıl oynanır?</b><br>
+      Sıra sende olduğunda ortadan veya atılan taştan bir taş al.
+      Ardından elinden bir taş seçip <b>TAŞI AT</b>.
+      14 taşla bitir.
+    </div>
+  </aside>
+
+  <section class="tableArea">
+    <div class="table">
+      <div class="tableGlow"></div>
+
+      <div class="indicator centerInfo">
+        <small>GÖSTERGE</small>
+        <div id="indicatorTile"></div>
+        <span id="jokerText">Okey: -</span>
+      </div>
+
+      <div class="centerPile">
+        <div class="pileLabel">ATILAN</div>
+        <div id="discardTile" class="discardTile">—</div>
+        <div class="wallVisual">
+          <div class="wallTiles">
+            <i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <span>ORTA <b id="wallCount">0</b></span>
+        </div>
+      </div>
+
+      <div id="seats"></div>
+
+      <div id="turnNotice" class="turnNotice hidden">
+        <span class="turnDot"></span> SIRA SENDE
+      </div>
+
+      <div id="roundFx" class="roundFx"></div>
+    </div>
+
+    <div class="handBar">
+      <div class="handTitle">
+        <span>ISTAKA</span>
+        <span id="handHint">4 oyuncu bekleniyor</span>
+      </div>
+      <div class="rack">
+        <div id="hand" class="hand"></div>
+      </div>
+      <div class="actions">
+        <button id="draw">🀄 ORTADAN ÇEK</button>
+        <button id="take" class="purple">↙ ATILANI AL</button>
+        <button id="discard" class="gold">↗ TAŞI AT</button>
+      </div>
+    </div>
+  </section>
+</main>
 <div id="toast" class="toast hidden"></div>
 </div>
-<script src="/socket.io/socket.io.js"></script><script src="okey.js"></script>
-</body></html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="okey.js"></script>
+</body>
+</html>

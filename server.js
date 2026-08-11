@@ -176,7 +176,7 @@ function handCanWin(hand,joker){
   return false;
 }
 function okeyPublic(room){
-  return {roomCode:room.code,hostId:room.hostId,phase:room.phase,message:room.message,
+  return {roomCode:room.code,hostId:room.hostId,phase:room.phase,winner:room.winner||null,message:room.message,
     joker:room.joker,indicator:room.indicator,wallCount:room.wall.length,
     discard:room.discard.length?room.discard[room.discard.length-1]:null,
     currentPlayerId:room.players[room.turn]?.id||null,
