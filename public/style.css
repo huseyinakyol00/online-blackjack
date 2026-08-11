@@ -511,3 +511,15 @@ html,body{background:#020303}
   .player:nth-child(3){bottom:9%}.player:nth-child(4){bottom:13%}.player:nth-child(5){bottom:27%}
   .tableActions{bottom:2%}
 }
+
+/* VIEWPORT WIDTH FIX */
+html,body,#game{width:100vw;min-width:0}
+.casinoLayout{width:100vw;max-width:none;overflow:hidden}
+.tableArea,.tableWrap{width:100vw;max-width:none;min-width:0}
+.felt{left:220px;width:calc(100vw - 235px)}
+.systemLog{left:220px;width:calc(100vw - 235px)}
+.bottomBar{width:100vw}
+@media(max-width:1200px){
+.felt{left:200px;width:calc(100vw - 215px)}
+.systemLog{left:200px;width:calc(100vw - 215px)}
+}
