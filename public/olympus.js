@@ -7,13 +7,13 @@ const SYMBOLS=[
  {id:"crown",icon:"👑",weight:11,mult:1},
  {id:"ring",icon:"💍",weight:10,mult:1},
  {id:"chalice",icon:"🏆",weight:10,mult:1},
- {id:"scatter",icon:"✦",weight:3.5,mult:0,scatter:true},
+ {id:"scatter",icon:"✦",weight:0.85,mult:0,scatter:true},
  {id:"wild",icon:"⚡",weight:3,mult:0,wild:true}
 ];
 const COLS=6,ROWS=5;
 let grid=[],busy=false,bet=10,balance=Number(localStorage.getItem("olympusBalance")||1000),lastWin=0;
 let muted=localStorage.getItem("olympusMuted")==="1",auto=false,freeSpins=0,bonusPending=false;
-let bonusMode=false,bonusMultiplierTotal=0,bonusMultiplierLog=[],bonusAccumWin=0;
+let bonusMode=false,bonusMultiplierTotal=0,bonusMultiplierLog=[],bonusAccumWin=0,bonusSpinsAwarded=0;
 
 function pickSymbol(){
  const total=SYMBOLS.reduce((a,s)=>a+s.weight,0);
@@ -201,10 +201,12 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
  if(scat>=4 && !bonusMode) bonusPending=true;
 
  // Three+ scatters during the feature award five extra free spins.
- if(scat>=3 && bonusMode){
-   freeSpins+=5;
-   $("featureText").textContent=`⚡ +5 FREE SPIN`;
-   showWin("⚡ +5 FREE SPIN");sfxBonus();
+ if(scat>=3 && bonusMode && bonusSpinsAwarded<30){
+   const extra=Math.min(5,30-bonusSpinsAwarded);
+   freeSpins+=extra;
+   bonusSpinsAwarded+=extra;
+   $("featureText").textContent=`⚡ +${extra} FREE SPIN`;
+   showWin(`⚡ +${extra} FREE SPIN`);sfxBonus();
  }
 
  while(true){
@@ -283,7 +285,7 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
  // Scatter feedback
  if(scat>=4){
    $("featureText").textContent=bonusMode
-     ? `⚡ ${scat} SCATTER • +5 FREE SPIN`
+     ? `⚡ ${scat} SCATTER • +5 FREE SPIN (MAKS. 30)`
      : `⚡ ${scat} SCATTER • 15 FREE SPIN`;
    if(!bonusMode)showWin(`⚡ ${scat} SCATTER`);
    await sleep(500);
@@ -305,7 +307,7 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
    freeSpins+=15;
    bonusPending=false;
    bonusMode=true;
-   bonusMultiplierTotal=0;bonusMultiplierLog=[];bonusAccumWin=0;
+   bonusMultiplierTotal=0;bonusMultiplierLog=[];bonusAccumWin=0;bonusSpinsAwarded=15;
    renderMultiplierBank();
    $("featureText").textContent="⚡ 15 FREE SPIN BAŞLADI";
    showWin("⚡ FREE SPIN");
@@ -318,6 +320,7 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
      toast(`FREE SPIN KAZANCI +${Math.floor(finalBonusWin).toLocaleString("tr-TR")}`);
    }
    bonusMode=false;
+   bonusSpinsAwarded=0;
    $("featureText").textContent=`BONUS BİTTİ • TOPLAM x${bonusMultiplierTotal>0?bonusMultiplierTotal:1}`;
    localStorage.setItem("olympusBalance",Math.floor(balance));
    renderMultiplierBank();
@@ -327,8 +330,38 @@ grid=makeGrid();render();renderMultiplierBank();await sleep(300);
  updateSpinAvailability();
 }
 $("spin").onclick=spin;
-$("betDown").onclick=()=>{if(busy)return;bet=Math.max(1,bet-5);render()};
-$("betUp").onclick=()=>{if(busy)return;bet=Math.min(Math.max(1,balance),bet+5);render()};
+$("betDown").onclick=()=>{
+ if(busy)return;
+ bet=Math.max(1,bet-5);
+ $("betInput").value=bet;
+ render();
+};
+$("betUp").onclick=()=>{
+ if(busy)return;
+ bet=Math.min(Math.max(1,balance),bet+5);
+ $("betInput").value=bet;
+ render();
+};
+$("betInput").addEventListener("input",()=>{
+ if(busy)return;
+ const value=parseInt($("betInput").value.replace(/[^0-9]/g,""),10);
+ if(Number.isFinite(value)&&value>=1){
+   bet=Math.min(value,Math.max(1,balance));
+   render();
+ }
+});
+$("betInput").addEventListener("change",()=>{
+ if(busy)return;
+ let value=parseInt($("betInput").value,10);
+ if(!Number.isFinite(value)||value<1)value=1;
+ bet=Math.min(value,Math.max(1,balance));
+ $("betInput").value=bet;
+ render();
+});
+$("betInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter"){e.preventDefault();e.currentTarget.blur();}
+ if(e.key===" ")e.preventDefault();
+});
 $("auto").onclick=()=>{auto=!auto;$("auto").classList.toggle("active",auto);$("auto").textContent=auto?"AUTO AÇIK":"AUTO";if(auto&&!busy)spin()};
 
 

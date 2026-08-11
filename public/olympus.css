@@ -282,3 +282,14 @@ body{
  .grid{min-height:430px}.featureBar{font-size:9px}.payline{gap:10px}
  .spinBtn{width:145px}.betControl{transform:scale(.9)}
 }
+
+.betInputWrap{min-width:82px;text-align:center;padding:0 3px}
+.betInputWrap small{display:block;color:#a99a8e;font-size:8px}
+.betInputWrap input{
+ width:82px;background:transparent;border:0;outline:0;text-align:center;
+ color:#fff1ba;font-size:18px;font-weight:800;font-family:inherit;
+ -moz-appearance:textfield;
+}
+.betInputWrap input::-webkit-outer-spin-button,
+.betInputWrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.betInputWrap input:focus{color:#fff7cf;text-shadow:0 0 10px rgba(244,213,123,.55)}

@@ -70,7 +70,10 @@
     <div class="bottomControls">
       <div class="betControl">
         <button id="betDown">−</button>
-        <div><small>BAHİS</small><b id="bet">10</b></div>
+        <div class="betInputWrap">
+          <small>BAHİS</small>
+          <input id="betInput" type="number" min="1" step="1" value="10" inputmode="numeric" autocomplete="off">
+        </div>
         <button id="betUp">+</button>
       </div>
       <button id="spin" class="spinBtn"><span>↻</span> ÇEVİR</button>
